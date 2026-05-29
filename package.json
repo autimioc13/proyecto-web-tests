@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run validate && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "csv": "node scripts/csv-to-quiz.js",
+    "import": "node scripts/import-quizzes.js",
+    "validate": "node scripts/validate.js"
   },
   "dependencies": {
     "axios": "^1.16.1",

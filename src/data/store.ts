@@ -8,8 +8,10 @@ export const loadStore = async (): Promise<Quiz[]> => {
   try {
     const res = await fetch('/data/quizzes-store.json');
     const data = await res.json();
-    cachedStore = data;
-    return data.quizzes || [];
+    // Handle both array format and object format
+    const quizzes = Array.isArray(data) ? data : (data.quizzes || []);
+    cachedStore = { quizzes };
+    return quizzes;
   } catch {
     console.error('Failed to load quizzes-store.json');
     return [];

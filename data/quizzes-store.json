@@ -123,5 +123,130 @@
         "shareText": "Me salió 🦅 en el personality test. ¿Y tú?"
       }
     ]
+  },
+  {
+    "slug": "que-eres-trabajando",
+    "silo": "personalidad",
+    "type": "personality",
+    "title": "¿Qué eres en el trabajo?",
+    "description": "Tu rol laboral ideal",
+    "emoji": "💼",
+    "timeEstimate": 4,
+    "questions": [
+      {
+        "question": "Prefieres tareas...",
+        "options": [
+          {
+            "option": "Creativas",
+            "values": "innovador:2;lider:0;analitico:0;solidario:1"
+          },
+          {
+            "option": "Estructuradas",
+            "values": "innovador:0;lider:0;analitico:3;solidario:1"
+          },
+          {
+            "option": "Variadas",
+            "values": "innovador:1;lider:2;analitico:1;solidario:1"
+          },
+          {
+            "option": "Con gente",
+            "values": "innovador:0;lider:2;analitico:0;solidario:3"
+          }
+        ]
+      },
+      {
+        "question": "Tu fortaleza es...",
+        "options": [
+          {
+            "option": "Visión",
+            "values": "innovador:3;lider:1;analitico:0;solidario:0"
+          },
+          {
+            "option": "Precisión",
+            "values": "innovador:0;lider:0;analitico:3;solidario:0"
+          },
+          {
+            "option": "Estrategia",
+            "values": "innovador:1;lider:2;analitico:1;solidario:0"
+          },
+          {
+            "option": "Empatía",
+            "values": "innovador:0;lider:1;analitico:0;solidario:3"
+          }
+        ]
+      },
+      {
+        "question": "Bajo presión...",
+        "options": [
+          {
+            "option": "Improviso",
+            "values": "innovador:3;lider:2;analitico:0;solidario:0"
+          },
+          {
+            "option": "Sigo el plan",
+            "values": "innovador:0;lider:0;analitico:3;solidario:0"
+          },
+          {
+            "option": "Adapto",
+            "values": "innovador:2;lider:1;analitico:1;solidario:1"
+          },
+          {
+            "option": "Apoyo al equipo",
+            "values": "innovador:0;lider:1;analitico:0;solidario:3"
+          }
+        ]
+      },
+      {
+        "question": "En conflictos...",
+        "options": [
+          {
+            "option": "Enfrento",
+            "values": "innovador:1;lider:3;analitico:1;solidario:0"
+          },
+          {
+            "option": "Busco solución",
+            "values": "innovador:0;lider:0;analitico:3;solidario:1"
+          },
+          {
+            "option": "Busco consenso",
+            "values": "innovador:1;lider:1;analitico:0;solidario:3"
+          },
+          {
+            "option": "Reflexiono",
+            "values": "innovador:1;lider:0;analitico:2;solidario:1"
+          }
+        ]
+      }
+    ],
+    "results": [
+      {
+        "id": "innovador",
+        "emoji": "💡",
+        "title": "El Innovador",
+        "description": "Siempre buscas nuevas formas de hacer las cosas. Tu creatividad es tu superpoder.",
+        "shareText": "Soy un Innovador 💡 ¿Y tú?"
+      },
+      {
+        "id": "lider",
+        "emoji": "👑",
+        "title": "El Líder",
+        "description": "Tienes lo que se necesita para dirigir. Tu carisma inspira a otros.",
+        "shareText": "Soy un Líder 👑"
+      },
+      {
+        "id": "analitico",
+        "emoji": "🧠",
+        "title": "El Analítico",
+        "description": "Tu precisión y lógica son incomparables. Ves lo que otros no ven.",
+        "shareText": "Soy un Analítico 🧠"
+      },
+      {
+        "id": "solidario",
+        "emoji": "🤝",
+        "title": "El Solidario",
+        "description": "Tu empatía y colaboración construyen equipos fuertes.",
+        "shareText": "Soy un Solidario 🤝"
+      }
+    ]
   }
 ]

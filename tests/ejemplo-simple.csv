@@ -1,0 +1,14 @@
+slug,silo,type,title,description,emoji,timeEstimate
+que-eres-trabajando,personalidad,personality,¿Qué eres en el trabajo?,Tu rol laboral ideal,💼,4
+
+q_text,opt_a,opt_a_val,opt_b,opt_b_val,opt_c,opt_c_val,opt_d,opt_d_val
+Prefieres tareas...,Creativas,innovador:2;lider:0;analitico:0;solidario:1,Estructuradas,innovador:0;lider:0;analitico:3;solidario:1,Variadas,innovador:1;lider:2;analitico:1;solidario:1,Con gente,innovador:0;lider:2;analitico:0;solidario:3
+Tu fortaleza es...,Visión,innovador:3;lider:1;analitico:0;solidario:0,Precisión,innovador:0;lider:0;analitico:3;solidario:0,Estrategia,innovador:1;lider:2;analitico:1;solidario:0,Empatía,innovador:0;lider:1;analitico:0;solidario:3
+Bajo presión...,Improviso,innovador:3;lider:2;analitico:0;solidario:0,Sigo el plan,innovador:0;lider:0;analitico:3;solidario:0,Adapto,innovador:2;lider:1;analitico:1;solidario:1,Apoyo al equipo,innovador:0;lider:1;analitico:0;solidario:3
+En conflictos...,Enfrento,innovador:1;lider:3;analitico:1;solidario:0,Busco solución,innovador:0;lider:0;analitico:3;solidario:1,Busco consenso,innovador:1;lider:1;analitico:0;solidario:3,Reflexiono,innovador:1;lider:0;analitico:2;solidario:1
+
+id,emoji,title,description,shareText
+innovador,💡,El Innovador,Siempre buscas nuevas formas de hacer las cosas. Tu creatividad es tu superpoder.,Soy un Innovador 💡 ¿Y tú?
+lider,👑,El Líder,Tienes lo que se necesita para dirigir. Tu carisma inspira a otros.,Soy un Líder 👑
+analitico,🧠,El Analítico,Tu precisión y lógica son incomparables. Ves lo que otros no ven.,Soy un Analítico 🧠
+solidario,🤝,El Solidario,Tu empatía y colaboración construyen equipos fuertes.,Soy un Solidario 🤝

@@ -1,0 +1,10 @@
+slug,silo,type,title,description,emoji,timeEstimate,q_text,opt_a,opt_a_val,opt_b,opt_b_val,opt_c,opt_c_val,opt_d,opt_d_val,correct
+mi-primer-test,personalidad,personality,Mi Primer Test de Personalidad,Descubre qué tipo de persona eres según tus preferencias,🎭,5,¿Cuál es tu forma ideal de pasar el fin de semana?,Socializando con amigos,leon:3;aguila:1,Descansando en casa,gato:3;serpiente:1,Explorando naturaleza,aguila:3;lobo:2,Haciendo deporte intenso,leon:2;lobo:3,
+mi-primer-test,personalidad,personality,,,,,¿Cómo reaccionas bajo presión?,Actúo rápidamente,leon:3;aguila:2,Busco ayuda,gato:2;serpiente:1,Analizo antes de actuar,serpiente:3;gato:1,Me paralizó,gato:3;serpiente:2,
+mi-primer-test,personalidad,personality,,,,,¿Qué tipo de trabajo te atrae?,Liderazgo y competencia,leon:3;aguila:2,Creatividad e innovación,aguila:3;gato:1,Rutina y estabilidad,gato:3;serpiente:2,Aventura y riesgo,lobo:3;aguila:2,
+mi-primer-test,personalidad,personality,,,,,¿Cuál es tu principal fortaleza?,Carisma,leon:3;aguila:1,Inteligencia,serpiente:3;gato:1,Resistencia,lobo:3;leon:1,Creatividad,aguila:2;gato:2,
+leon|🦁|El León|Naciste para liderar. Confiado, carismático y siempre en primera línea.|Soy un León: líder carismático y valiente,,,,,,,,,
+aguila|🦅|El Águila|Ambicioso y perspicaz. Ves el panorama completo y siempre apuntas alto.|Soy un Águila: visión estratégica,,,,,,,,,
+gato|🐱|El Gato|Discreto e independiente. Prefieres tu propio camino y eres impredecible.|Soy un Gato: misterioso e independiente,,,,,,,,,
+serpiente|🐍|La Serpiente|Inteligente y reflexivo. Planificas cada movimiento cuidadosamente.|Soy una Serpiente: sabia y estratégica,,,,,,,,,
+lobo|🐺|El Lobo|Leal y resiliente. Te rodeas de tu manada y enfrentas cualquier desafío.|Soy un Lobo: fuerte y solidario,,,,,,,,,
