@@ -9,7 +9,8 @@
     "lint": "eslint",
     "csv": "node scripts/csv-to-quiz.js",
     "import": "node scripts/import-quizzes.js",
-    "validate": "node scripts/validate.js"
+    "validate": "node scripts/validate.js",
+    "generate": "node scripts/generate-quizzes.js"
   },
   "dependencies": {
     "axios": "^1.16.1",
