@@ -1,13 +1,9 @@
 import { getQuizBySlug, getAllQuizzes } from '@/data/helpers';
 import { generateQuizMetadata } from '@/lib/metadata';
 import { generateQuizSchema } from '@/lib/jsonld';
+import QuizEngine from '@/components/QuizEngine';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
-import dynamic from 'next/dynamic';
-
-const QuizEngine = dynamic(() => import('@/components/QuizEngine'), {
-  ssr: false,
-});
 
 export async function generateStaticParams() {
   const quizzes = await getAllQuizzes();

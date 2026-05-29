@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { DEFAULT_METADATA } from '@/lib/metadata';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import '@/app/globals.css';
+import './globals.css';
 
 export const metadata: Metadata = DEFAULT_METADATA;
 
