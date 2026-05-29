@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { DEFAULT_METADATA } from '@/lib/metadata';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 import './globals.css';
 
 export const metadata: Metadata = DEFAULT_METADATA;
@@ -35,6 +36,7 @@ export default function RootLayout({
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <CookieConsentBanner />
       </body>
     </html>
   );
