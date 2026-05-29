@@ -1,7 +1,8 @@
 import { getDataAdapter } from '@/lib/data';
 import MetricsCard from '@/components/admin/MetricsCard';
 import DiagnosticBox from '@/components/admin/DiagnosticBox';
-import { DollarSign, BarChart3 } from 'lucide-react';
+import { DollarSign, BarChart3, Sparkles } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function AdminAnalytics() {
   const adapter = getDataAdapter();
@@ -25,9 +26,18 @@ export default async function AdminAnalytics() {
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-7xl mx-auto space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Dashboard Analítico</h1>
-          <p className="text-gray-600">Monitorea el rendimiento y monetización de tus tests</p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">Dashboard Analítico</h1>
+            <p className="text-gray-600">Monitorea el rendimiento y monetización de tus tests</p>
+          </div>
+          <Link
+            href="/admin/generate"
+            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:shadow-lg transition flex items-center gap-2 whitespace-nowrap"
+          >
+            <Sparkles size={20} />
+            Generar Tests IA
+          </Link>
         </div>
 
         {/* KPIs globales */}
