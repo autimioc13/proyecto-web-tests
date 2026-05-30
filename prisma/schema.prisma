@@ -8,3 +8,55 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+// GDPR Compliance Models
+// Immutable audit logs for compliance and regulatory requirements
+
+model ActivityLog {
+  id            String   @id @default(cuid())
+  userId        String   // User who triggered activity
+  activityType  String   // 'quiz_completed', 'data_exported', 'account_deleted', etc.
+  resource      String?  // What was affected ('profile', 'test_result', 'account')
+  resourceId    String?  // ID of affected resource
+  details       Json?    // Additional metadata (quiz score, fields exported, etc.)
+  ipAddress     String?  // IP where activity happened
+  userAgent     String?  // Browser/client info
+  consentLevel  String?  // Consent status at time of activity
+  timestamp     DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([userId])
+  @@index([timestamp])
+  @@index([activityType])
+}
+
+model DeletionRequest {
+  id                String   @id @default(cuid())
+  email             String   @unique
+  confirmationToken String?  @unique
+  tokenExpiresAt    DateTime?
+  confirmed         Boolean  @default(false)
+  confirmedAt       DateTime?
+  deletedAt         DateTime?
+  status            String   @default("pending") // 'pending', 'confirmed', 'completed', 'cancelled'
+  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime @updatedAt @db.Timestamptz(3)
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model ConsentLog {
+  id         String   @id @default(cuid())
+  userId     String
+  consentType String // 'privacy_policy', 'cookies', 'marketing', 'analytics'
+  accepted   Boolean
+  version    String   // Policy version (e.g., '1.0', '2.1')
+  ipAddress  String?
+  userAgent  String?
+  timestamp  DateTime @default(now()) @db.Timestamptz(3)
+
+  @@index([userId])
+  @@index([timestamp])
+  @@index([consentType])
+}
