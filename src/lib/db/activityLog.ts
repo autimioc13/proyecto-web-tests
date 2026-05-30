@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db/client';
+import { ActivityLog } from '@prisma/client';
 
 export interface CreateActivityLogInput {
   userId: string;
@@ -9,6 +10,15 @@ export interface CreateActivityLogInput {
   ipAddress?: string;
   userAgent?: string;
   consentLevel?: string;
+}
+
+/**
+ * Paginated response format for activity log queries
+ */
+export interface PaginatedActivityLogsResponse {
+  data: ActivityLog[];
+  total: number;
+  hasMore: boolean;
 }
 
 /**
@@ -45,22 +55,33 @@ export async function createActivityLog(
 }
 
 /**
- * Get all activity logs for a user
+ * Get all activity logs for a user with pagination metadata
  */
 export async function getUserActivityLogs(
   userId: string,
   limit: number = 100,
   offset: number = 0
-): Promise<any[]> {
+): Promise<PaginatedActivityLogsResponse> {
   try {
-    const logs = await prisma.activityLog.findMany({
-      where: { userId },
-      orderBy: { timestamp: 'desc' },
-      take: limit,
-      skip: offset,
-    });
+    const [logs, total] = await Promise.all([
+      prisma.activityLog.findMany({
+        where: { userId },
+        orderBy: { timestamp: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+      prisma.activityLog.count({
+        where: { userId },
+      }),
+    ]);
 
-    return logs;
+    const hasMore = offset + limit < total;
+
+    return {
+      data: logs,
+      total,
+      hasMore,
+    };
   } catch (error) {
     console.error('Failed to fetch user activity logs:', error);
     throw new Error('Failed to retrieve activity logs');
@@ -68,22 +89,33 @@ export async function getUserActivityLogs(
 }
 
 /**
- * Get activity logs by activity type (for compliance reports)
+ * Get activity logs by activity type with pagination metadata
  */
 export async function getActivityLogsByType(
   activityType: string,
   limit: number = 100,
   offset: number = 0
-): Promise<any[]> {
+): Promise<PaginatedActivityLogsResponse> {
   try {
-    const logs = await prisma.activityLog.findMany({
-      where: { activityType },
-      orderBy: { timestamp: 'desc' },
-      take: limit,
-      skip: offset,
-    });
+    const [logs, total] = await Promise.all([
+      prisma.activityLog.findMany({
+        where: { activityType },
+        orderBy: { timestamp: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+      prisma.activityLog.count({
+        where: { activityType },
+      }),
+    ]);
 
-    return logs;
+    const hasMore = offset + limit < total;
+
+    return {
+      data: logs,
+      total,
+      hasMore,
+    };
   } catch (error) {
     console.error(`Failed to fetch activity logs for type ${activityType}:`, error);
     throw new Error(`Failed to retrieve ${activityType} logs`);
@@ -117,25 +149,44 @@ export async function countUserActivities(
 }
 
 /**
- * Get activity logs for compliance report
+ * Get activity logs for compliance report with flexible pagination
  */
 export async function getComplianceActivityReport(
   startDate: Date,
-  endDate: Date
-): Promise<any[]> {
+  endDate: Date,
+  limit: number = 100,
+  offset: number = 0
+): Promise<PaginatedActivityLogsResponse> {
   try {
-    const logs = await prisma.activityLog.findMany({
-      where: {
-        timestamp: {
-          gte: startDate,
-          lte: endDate,
+    const [logs, total] = await Promise.all([
+      prisma.activityLog.findMany({
+        where: {
+          timestamp: {
+            gte: startDate,
+            lte: endDate,
+          },
         },
-      },
-      orderBy: { timestamp: 'desc' },
-      take: 1000,
-    });
+        orderBy: { timestamp: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+      prisma.activityLog.count({
+        where: {
+          timestamp: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+      }),
+    ]);
 
-    return logs;
+    const hasMore = offset + limit < total;
+
+    return {
+      data: logs,
+      total,
+      hasMore,
+    };
   } catch (error) {
     console.error('Failed to generate compliance report:', error);
     throw new Error('Compliance report generation failed');
