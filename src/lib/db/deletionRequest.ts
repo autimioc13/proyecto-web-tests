@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db/client';
 import { DeletionRequest } from '@prisma/client';
 import { generateSecureToken } from '@/lib/compliance/encryption';
+import { createActivityLog } from '@/lib/db/activityLog';
 
 export interface CreateDeletionRequestInput {
   email: string;
@@ -45,6 +46,17 @@ export async function createDeletionRequest(
         tokenExpiresAt,
         status: 'pending',
       },
+    });
+
+    // Log audit trail for GDPR compliance
+    await createActivityLog({
+      userId: 'system',
+      activityType: 'request_account_deletion',
+      resource: 'deletion_request',
+      resourceId: request.id,
+      details: { email: request.email },
+      ipAddress: input.ipAddress,
+      userAgent: input.userAgent,
     });
 
     console.log(`✓ Deletion request created for ${input.email}, expires: ${tokenExpiresAt}`);
@@ -97,6 +109,15 @@ export async function confirmDeletionRequest(token: string): Promise<DeletionReq
       },
     });
 
+    // Log audit trail for GDPR compliance
+    await createActivityLog({
+      userId: 'system',
+      activityType: 'confirm_account_deletion',
+      resource: 'deletion_request',
+      resourceId: confirmed.id,
+      details: { email: confirmed.email, confirmedAt: confirmed.confirmedAt },
+    });
+
     console.log(`✓ Deletion confirmed for ${confirmed.email}`);
     return confirmed;
   } catch (error) {
@@ -110,12 +131,35 @@ export async function confirmDeletionRequest(token: string): Promise<DeletionReq
  */
 export async function completeDeletion(requestId: string): Promise<DeletionRequest | null> {
   try {
+    // Fetch the request first to validate state
+    const request = await prisma.deletionRequest.findUnique({
+      where: { id: requestId },
+    });
+
+    if (!request) {
+      throw new Error('Deletion request not found');
+    }
+
+    // Validate state: must be confirmed before completion
+    if (request.status !== 'confirmed') {
+      throw new Error('Deletion must be confirmed before completion');
+    }
+
     const completed = await prisma.deletionRequest.update({
       where: { id: requestId },
       data: {
         status: 'completed',
         deletedAt: new Date(),
       },
+    });
+
+    // Log audit trail for GDPR compliance
+    await createActivityLog({
+      userId: 'system',
+      activityType: 'complete_account_deletion',
+      resource: 'deletion_request',
+      resourceId: completed.id,
+      details: { email: completed.email, deletedAt: completed.deletedAt },
     });
 
     console.log(`✓ Deletion completed for ${completed.email}`);
@@ -213,6 +257,15 @@ export async function cancelDeletionRequest(requestId: string): Promise<Deletion
       },
     });
 
+    // Log audit trail for GDPR compliance
+    await createActivityLog({
+      userId: 'system',
+      activityType: 'cancel_account_deletion',
+      resource: 'deletion_request',
+      resourceId: cancelled.id,
+      details: { email: cancelled.email },
+    });
+
     console.log(`✓ Deletion cancelled for ${cancelled.email}`);
     return cancelled;
   } catch (error) {
@@ -223,6 +276,7 @@ export async function cancelDeletionRequest(requestId: string): Promise<Deletion
 
 /**
  * Clean up expired deletion requests (older than 30 days)
+ * Ensures requests outside both the retention window AND confirmation window are removed
  */
 export async function cleanupExpiredDeletionRequests(): Promise<number> {
   try {
@@ -233,6 +287,7 @@ export async function cleanupExpiredDeletionRequests(): Promise<number> {
         AND: [
           { status: 'pending' },
           { createdAt: { lt: thirtyDaysAgo } },
+          { tokenExpiresAt: { lt: new Date() } }, // Ensure token has expired (no 48h window)
         ],
       },
     });
