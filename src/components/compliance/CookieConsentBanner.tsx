@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 
@@ -61,8 +63,8 @@ export default function CookieConsentBanner({ onConsent }: CookieConsentBannerPr
 
   const handleCustomize = () => {
     const customConsent: CookiePreferences = {
-      necessary: true,
       ...preferences,
+      necessary: true,
     };
     saveConsent(customConsent);
   };
@@ -85,19 +87,22 @@ export default function CookieConsentBanner({ onConsent }: CookieConsentBannerPr
 
   const initializeGoogleAnalytics = () => {
     // Initialize Google Analytics only if consented
-    if (typeof window !== 'undefined' && !window.gtag) {
-      const script = document.createElement('script');
-      script.async = true;
-      script.src = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
-      document.head.appendChild(script);
+    if (typeof window !== 'undefined') {
+      const win = window as any;
+      if (!win.gtag) {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`;
+        document.head.appendChild(script);
 
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        window.dataLayer.push(arguments);
+        win.dataLayer = win.dataLayer || [];
+        function gtag(...args: any[]) {
+          win.dataLayer.push(args);
+        }
+        win.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', process.env.NEXT_PUBLIC_GA_ID);
       }
-      window.gtag = gtag as any;
-      gtag('js', new Date());
-      gtag('config', process.env.NEXT_PUBLIC_GA_ID);
     }
   };
 
