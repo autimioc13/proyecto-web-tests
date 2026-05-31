@@ -2,19 +2,23 @@
 
 import { ScoreResult } from '@/lib/scoring/calculator';
 import { getGradeColor, getGradeBgColor } from '@/lib/scoring/calculator';
+import { CategoryTheme, getCategoryTheme, defaultTheme } from '@/lib/themes/categoryThemes';
 import { Trophy, Target, TrendingUp } from 'lucide-react';
 
 interface ResultsCardProps {
   scoreResult: ScoreResult;
   testTitle: string;
   timeSpent?: number; // seconds
+  theme?: CategoryTheme; // Optional, defaults to defaultTheme
 }
 
 export default function ResultsCard({
   scoreResult,
   testTitle,
   timeSpent,
+  theme,
 }: ResultsCardProps) {
+  const themeToUse = theme || defaultTheme;
   const gradeColor = getGradeColor(scoreResult.grade);
   const gradeBgColor = getGradeBgColor(scoreResult.grade);
 
@@ -24,7 +28,7 @@ export default function ResultsCard({
         {/* Header */}
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-2">¡Test Completado!</h1>
-          <p className="text-slate-400">{testTitle}</p>
+          <p className="text-slate-400"><span className="mr-2">{themeToUse.icon}</span>{testTitle}</p>
         </div>
 
         {/* Grade Display */}
@@ -61,10 +65,10 @@ export default function ResultsCard({
           {/* Score Percentage */}
           <div className="bg-slate-800 rounded-lg p-6 border border-slate-700">
             <div className="flex items-center gap-3 mb-4">
-              <TrendingUp className="w-6 h-6 text-purple-400" />
+              <TrendingUp className={`w-6 h-6 ${themeToUse.accentText}`} />
               <h3 className="font-semibold">Puntuación</h3>
             </div>
-            <div className="text-3xl font-bold text-purple-400 mb-1">
+            <div className={`text-3xl font-bold ${themeToUse.accentText} mb-1`}>
               {scoreResult.score}%
             </div>
             <p className="text-sm text-slate-400">
