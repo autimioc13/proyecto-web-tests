@@ -9,6 +9,16 @@ import {
   TestMetadata,
 } from '@/lib/types/test';
 
+const TEST_CATEGORY_MAP: Record<string, string> = {
+  'iq-test-1': 'inteligencia',
+  'logic-puzzle-1': 'inteligencia',
+  'mbti-test': 'personalidad',
+  'chess-puzzle': 'logica',
+  'geography-1': 'conocimiento',
+  'productivity-quiz': 'productividad',
+  'facts-1': 'curiosidades',
+};
+
 /**
  * Fetches metadata for a test including title, category, and configuration
  * @param testId - The ID of the test to fetch metadata for
@@ -22,14 +32,15 @@ export async function fetchTestMetadata(testId: string): Promise<TestMetadata> {
   // const response = await fetch(`/api/tests/${testId}/metadata`);
   // return response.json();
 
+  const categoryId = TEST_CATEGORY_MAP[testId] ?? 'personalidad';
   return {
     id: testId,
-    title: '',
-    categoryId: '',
-    totalQuestions: 0,
-    estimatedTime: 0,
+    title: `Test de ${categoryId.charAt(0).toUpperCase() + categoryId.slice(1)}`,
+    categoryId,
+    totalQuestions: 10,
+    estimatedTime: 15,
     difficulty: 'Medium',
-    description: '',
+    description: 'Mock test description',
   };
 }
 
@@ -94,11 +105,8 @@ export async function fetchTestSession(sessionId: string): Promise<TestSession> 
   return {
     id: sessionId,
     testId: '',
-    userId: undefined,
     startedAt: new Date(),
-    completedAt: undefined,
     answers: new Map(),
-    score: undefined,
-    timeSpent: undefined,
+    timeSpent: 0,
   };
 }
