@@ -3,12 +3,14 @@
 import { useState, useCallback } from 'react';
 import { Question, TestSession } from '@/lib/types/test';
 import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
+import { CategoryTheme, defaultTheme } from '@/lib/themes/categoryThemes';
 
 interface TestPlayerProps {
   questions: Question[];
   onSubmit: (answers: Map<string, string>) => void;
   testId: string;
   sessionId: string;
+  theme?: CategoryTheme;
 }
 
 export default function TestPlayer({
@@ -16,11 +18,13 @@ export default function TestPlayer({
   onSubmit,
   testId,
   sessionId,
+  theme,
 }: TestPlayerProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, string>>(new Map());
   const [timeSpent, setTimeSpent] = useState(0);
 
+  const themeToUse = theme || defaultTheme;
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
@@ -75,7 +79,7 @@ export default function TestPlayer({
           </div>
           <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
             <div
-              className="bg-gradient-to-r from-purple-500 to-purple-600 h-full transition-all duration-300"
+              className={`bg-gradient-to-r ${themeToUse.progressGradient} h-full transition-all duration-300`}
               style={{ width: `${progress}%` }}
             />
           </div>
@@ -86,7 +90,7 @@ export default function TestPlayer({
           <div className="mb-6">
             <h2 className="text-2xl font-bold mb-4">{currentQuestion.questionText}</h2>
             <p className="text-slate-400 text-sm">
-              Dificultad: <span className="text-purple-400">{currentQuestion.difficulty}</span>
+              Dificultad: <span className={themeToUse.accentText}>{currentQuestion.difficulty}</span>
             </p>
           </div>
 
@@ -100,16 +104,16 @@ export default function TestPlayer({
                   w-full text-left p-4 rounded-lg border-2 transition-all
                   ${
                     selectedOptionId === option.id
-                      ? 'border-purple-500 bg-purple-900/30'
+                      ? `${themeToUse.accentBorder} ${themeToUse.softBg}`
                       : 'border-slate-700 bg-slate-700/50 hover:border-slate-600'
                   }
                 `}
               >
                 <div className="flex items-center gap-3">
-                  <span className="font-bold text-purple-400">{option.letter}</span>
+                  <span className={`font-bold ${themeToUse.accentText}`}>{option.letter}</span>
                   <span>{option.text}</span>
                   {selectedOptionId === option.id && (
-                    <CheckCircle className="w-5 h-5 ml-auto text-purple-400" />
+                    <CheckCircle className={`w-5 h-5 ml-auto ${themeToUse.accentText}`} />
                   )}
                 </div>
               </button>
@@ -131,7 +135,7 @@ export default function TestPlayer({
           {currentQuestionIndex < questions.length - 1 ? (
             <button
               onClick={handleNextQuestion}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded transition"
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 ${themeToUse.accentBg} ${themeToUse.accentBgHover} rounded transition`}
             >
               Siguiente
               <ArrowRight size={18} />
