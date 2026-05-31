@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createActivityLog } from '@/lib/db/activityLog';
-import { getUserActivityLogs } from '@/lib/db/activityLog';
 
 /**
  * POST /api/compliance/log-activity
@@ -89,13 +88,42 @@ export async function GET(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { error: 'userId is required' },
+        { error: 'userId es requerido' },
         { status: 400 }
       );
     }
 
-    const limit = parseInt(request.nextUrl.searchParams.get('limit') || '100');
-    const offset = parseInt(request.nextUrl.searchParams.get('offset') || '0');
+    // Parse and validate pagination parameters
+    let limit = 100;
+    let offset = 0;
+
+    const limitParam = request.nextUrl.searchParams.get('limit');
+    const offsetParam = request.nextUrl.searchParams.get('offset');
+
+    if (limitParam) {
+      const parsedLimit = parseInt(limitParam, 10);
+      if (isNaN(parsedLimit) || parsedLimit < 1 || parsedLimit > 500) {
+        return NextResponse.json(
+          { error: 'limit debe ser un número entre 1 y 500' },
+          { status: 400 }
+        );
+      }
+      limit = parsedLimit;
+    }
+
+    if (offsetParam) {
+      const parsedOffset = parseInt(offsetParam, 10);
+      if (isNaN(parsedOffset) || parsedOffset < 0) {
+        return NextResponse.json(
+          { error: 'offset debe ser un número no negativo' },
+          { status: 400 }
+        );
+      }
+      offset = parsedOffset;
+    }
+
+    // Import at runtime to avoid build-time database init
+    const { getUserActivityLogs } = await import('@/lib/db/activityLog');
 
     const activities = await getUserActivityLogs(userId, limit, offset);
 
@@ -110,7 +138,7 @@ export async function GET(request: NextRequest) {
     console.error('Error fetching activities:', error);
 
     return NextResponse.json(
-      { error: 'Failed to fetch activities' },
+      { error: 'Error al obtener actividades' },
       { status: 500 }
     );
   }
