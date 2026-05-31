@@ -4,11 +4,13 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BarChart3, TrendingUp, Calendar, Trophy } from 'lucide-react';
 import { getGradeColor } from '@/lib/scoring/calculator';
+import { getCategoryTheme } from '@/lib/themes/categoryThemes';
 
 interface UserTestResult {
   id: string;
   testId: string;
   testTitle: string;
+  categoryId?: string;
   score: number;
   grade: string;
   completedAt: string;
@@ -136,6 +138,7 @@ export default function DashboardPage() {
                   <tr>
                     <th className="px-6 py-3 text-left text-sm font-semibold">Test</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold">Calificación</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold">Categoría</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold">Puntuación</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold">Fecha</th>
                   </tr>
@@ -149,6 +152,17 @@ export default function DashboardPage() {
                       <td className="px-6 py-4">{result.testTitle}</td>
                       <td className={`px-6 py-4 font-bold ${getGradeColor(result.grade)}`}>
                         {result.grade}
+                      </td>
+                      <td className="px-6 py-4">
+                        {(() => {
+                          const t = getCategoryTheme(result.categoryId);
+                          return (
+                            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${t.softBg} ${t.accentText} border ${t.softBorder}`}>
+                              <span>{t.icon}</span>
+                              {t.name}
+                            </span>
+                          );
+                        })()}
                       </td>
                       <td className="px-6 py-4">{result.score}%</td>
                       <td className="px-6 py-4 text-slate-400">
