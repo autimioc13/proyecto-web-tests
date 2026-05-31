@@ -1,4 +1,6 @@
 // Types for test categories and tests
+import { categoryThemes } from '@/lib/themes/categoryThemes';
+
 export interface Test {
   id: string;
   title: string;
@@ -29,10 +31,10 @@ const mockCategories: TestCategory[] = [
     name: 'Inteligencia',
     slug: 'inteligencia',
     description: 'Prueba tu cociente intelectual y habilidades cognitivas',
-    icon: '🧠',
-    color: 'from-blue-500 to-cyan-500',
-    gradientFrom: 'from-blue-500',
-    gradientTo: 'to-cyan-500',
+    icon: categoryThemes.inteligencia.icon,
+    color: categoryThemes.inteligencia.gradient,
+    gradientFrom: categoryThemes.inteligencia.gradientFrom,
+    gradientTo: categoryThemes.inteligencia.gradientTo,
     testCount: 12,
     tests: [
       {
@@ -60,10 +62,10 @@ const mockCategories: TestCategory[] = [
     name: 'Personalidad',
     slug: 'personalidad',
     description: 'Descubre tu tipo de personalidad y características únicas',
-    icon: '✨',
-    color: 'from-purple-500 to-pink-500',
-    gradientFrom: 'from-purple-500',
-    gradientTo: 'to-pink-500',
+    icon: categoryThemes.personalidad.icon,
+    color: categoryThemes.personalidad.gradient,
+    gradientFrom: categoryThemes.personalidad.gradientFrom,
+    gradientTo: categoryThemes.personalidad.gradientTo,
     testCount: 15,
     tests: [
       {
@@ -82,10 +84,10 @@ const mockCategories: TestCategory[] = [
     name: 'Lógica',
     slug: 'logica',
     description: 'Desafía tu pensamiento lógico y razonamiento estratégico',
-    icon: '🎯',
-    color: 'from-green-500 to-emerald-500',
-    gradientFrom: 'from-green-500',
-    gradientTo: 'to-emerald-500',
+    icon: categoryThemes.logica.icon,
+    color: categoryThemes.logica.gradient,
+    gradientFrom: categoryThemes.logica.gradientFrom,
+    gradientTo: categoryThemes.logica.gradientTo,
     testCount: 10,
     tests: [
       {
@@ -104,10 +106,10 @@ const mockCategories: TestCategory[] = [
     name: 'Conocimiento',
     slug: 'conocimiento',
     description: 'Pon a prueba tu conocimiento general en múltiples temas',
-    icon: '📚',
-    color: 'from-amber-500 to-orange-500',
-    gradientFrom: 'from-amber-500',
-    gradientTo: 'to-orange-500',
+    icon: categoryThemes.conocimiento.icon,
+    color: categoryThemes.conocimiento.gradient,
+    gradientFrom: categoryThemes.conocimiento.gradientFrom,
+    gradientTo: categoryThemes.conocimiento.gradientTo,
     testCount: 25,
     tests: [
       {
@@ -126,10 +128,10 @@ const mockCategories: TestCategory[] = [
     name: 'Productividad',
     slug: 'productividad',
     description: 'Analiza tus hábitos y nivel de productividad personal',
-    icon: '⚡',
-    color: 'from-red-500 to-rose-500',
-    gradientFrom: 'from-red-500',
-    gradientTo: 'to-rose-500',
+    icon: categoryThemes.productividad.icon,
+    color: categoryThemes.productividad.gradient,
+    gradientFrom: categoryThemes.productividad.gradientFrom,
+    gradientTo: categoryThemes.productividad.gradientTo,
     testCount: 8,
     tests: [
       {
@@ -148,10 +150,10 @@ const mockCategories: TestCategory[] = [
     name: 'Curiosidades',
     slug: 'curiosidades',
     description: 'Aprende datos fascinantes y sorprendentes del mundo',
-    icon: '🌟',
-    color: 'from-indigo-500 to-violet-500',
-    gradientFrom: 'from-indigo-500',
-    gradientTo: 'to-violet-500',
+    icon: categoryThemes.curiosidades.icon,
+    color: categoryThemes.curiosidades.gradient,
+    gradientFrom: categoryThemes.curiosidades.gradientFrom,
+    gradientTo: categoryThemes.curiosidades.gradientTo,
     testCount: 20,
     tests: [
       {
