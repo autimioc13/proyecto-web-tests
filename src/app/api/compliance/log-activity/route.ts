@@ -1,70 +1,116 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateAdminSession } from '@/lib/admin-auth';
+import { createActivityLog } from '@/lib/db/activityLog';
+import { getUserActivityLogs } from '@/lib/db/activityLog';
 
 /**
  * POST /api/compliance/log-activity
  *
  * Immutable activity logging for audit trail
- * Used by client to log user activities for GDPR/CCPA compliance
+ * Persists user activities to database for GDPR/CCPA compliance
  */
 
-interface ActivityLogPayload {
+interface LogActivityRequest {
   userId: string;
   activityType: string;
-  resource: string;
+  resource?: string;
   resourceId?: string;
   details?: Record<string, any>;
+  ipAddress?: string;
+  userAgent?: string;
+  consentLevel?: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { userId, activityType, resource, resourceId, details } = await request.json() as ActivityLogPayload;
+    const body = (await request.json()) as LogActivityRequest;
 
     // Validate required fields
-    if (!userId || !activityType || !resource) {
+    if (!body.userId || !body.activityType) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'userId and activityType are required' },
         { status: 400 }
       );
     }
 
-    // Get request metadata
-    const ipAddress = request.headers.get('x-forwarded-for') ||
+    // Get IP from headers if not provided
+    const ipAddress = body.ipAddress ||
+                     request.headers.get('x-forwarded-for') ||
                      request.headers.get('x-real-ip') ||
                      'unknown';
-    const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Create audit log entry
-    const activityLog = {
-      id: `log_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      userId,
-      activityType,
-      resource,
-      resourceId: resourceId || null,
-      details: details || null,
+    const userAgent = body.userAgent ||
+                     request.headers.get('user-agent') ||
+                     'unknown';
+
+    // Create activity log in database
+    const activityLog = await createActivityLog({
+      userId: body.userId,
+      activityType: body.activityType,
+      resource: body.resource,
+      resourceId: body.resourceId,
+      details: body.details || {},
       ipAddress,
       userAgent,
-      timestamp: new Date().toISOString(),
-      // Note: In production, store this in immutable database (DynamoDB, etc)
-      // For now, we'll log to console and file
-    };
+      consentLevel: body.consentLevel,
+    });
 
-    // Log to console (for development)
-    console.log('[AUDIT LOG]', activityLog);
-
-    // In production, store in database:
-    // await db.activityLogs.create(activityLog);
-
-    // Return success
     return NextResponse.json({
       success: true,
-      logId: activityLog.id,
+      message: 'Activity logged',
+      activityId: activityLog.id,
+      timestamp: activityLog.timestamp,
     });
 
   } catch (error) {
-    console.error('Error logging activity:', error);
+    console.error('Error in log-activity:', error);
+
+    if (error instanceof SyntaxError) {
+      return NextResponse.json(
+        { error: 'Invalid JSON in request' },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       { error: 'Failed to log activity' },
+      { status: 500 }
+    );
+  }
+}
+
+/**
+ * GET /api/compliance/log-activity?userId=...&limit=...&offset=...
+ *
+ * Retrieve activity logs for a user with pagination
+ */
+export async function GET(request: NextRequest) {
+  try {
+    const userId = request.nextUrl.searchParams.get('userId');
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'userId is required' },
+        { status: 400 }
+      );
+    }
+
+    const limit = parseInt(request.nextUrl.searchParams.get('limit') || '100');
+    const offset = parseInt(request.nextUrl.searchParams.get('offset') || '0');
+
+    const activities = await getUserActivityLogs(userId, limit, offset);
+
+    return NextResponse.json({
+      success: true,
+      data: activities.data,
+      total: activities.total,
+      hasMore: activities.hasMore,
+    });
+
+  } catch (error) {
+    console.error('Error fetching activities:', error);
+
+    return NextResponse.json(
+      { error: 'Failed to fetch activities' },
       { status: 500 }
     );
   }
