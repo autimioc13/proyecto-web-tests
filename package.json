@@ -13,7 +13,7 @@
     "generate": "node scripts/generate-quizzes.js"
   },
   "dependencies": {
-    "@prisma/client": "^7.8.0",
+    "@prisma/client": "^5.14.0",
     "@sendgrid/mail": "^8.1.6",
     "axios": "^1.16.1",
     "crypto-js": "^4.2.0",
@@ -28,13 +28,14 @@
     "react-dom-confetti": "^0.2.0"
   },
   "devDependencies": {
+    "@prisma/internals": "^7.8.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
-    "prisma": "^7.8.0",
+    "prisma": "^5.14.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
