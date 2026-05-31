@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import TestPlayer from '@/components/tests/TestPlayer';
 import { Question } from '@/lib/types/test';
 import { fetchTestQuestions, fetchTestMetadata } from '@/lib/api/questions';
+import { getCategoryTheme, CategoryTheme, defaultTheme } from '@/lib/themes/categoryThemes';
 import { Loader } from 'lucide-react';
 
 export default function TestPage() {
@@ -15,6 +16,7 @@ export default function TestPage() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [testTitle, setTestTitle] = useState('');
   const [sessionId, setSessionId] = useState('');
+  const [theme, setTheme] = useState<CategoryTheme>(defaultTheme);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -24,6 +26,7 @@ export default function TestPage() {
         // Fetch test metadata (title, etc)
         const metadata = await fetchTestMetadata(testId);
         setTestTitle(metadata.title);
+        setTheme(getCategoryTheme(metadata.categoryId));
 
         // Fetch questions
         const testQuestions = await fetchTestQuestions(testId);
@@ -114,6 +117,7 @@ export default function TestPage() {
         onSubmit={handleTestSubmit}
         testId={testId}
         sessionId={sessionId}
+        theme={theme}
       />
     </div>
   );

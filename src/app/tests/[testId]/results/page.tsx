@@ -6,6 +6,7 @@ import ResultsCard from '@/components/tests/ResultsCard';
 import { ScoreResult, calculateScore } from '@/lib/scoring/calculator';
 import { Question, TestSession } from '@/lib/types/test';
 import { fetchTestQuestions, fetchTestSession, fetchTestMetadata } from '@/lib/api/questions';
+import { getCategoryTheme, CategoryTheme, defaultTheme } from '@/lib/themes/categoryThemes';
 import { Loader } from 'lucide-react';
 
 export default function ResultsPage() {
@@ -17,6 +18,7 @@ export default function ResultsPage() {
 
   const [scoreResult, setScoreResult] = useState<ScoreResult | null>(null);
   const [testTitle, setTestTitle] = useState('');
+  const [theme, setTheme] = useState<CategoryTheme>(defaultTheme);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -27,6 +29,7 @@ export default function ResultsPage() {
 
         const metadata = await fetchTestMetadata(testId);
         setTestTitle(metadata.title);
+        setTheme(getCategoryTheme(metadata.categoryId));
 
         const questions = await fetchTestQuestions(testId);
 
@@ -44,6 +47,7 @@ export default function ResultsPage() {
             score: result.score,
             grade: result.grade,
             timeSpent: session.timeSpent,
+            categoryId: metadata.categoryId,
           }),
         }).catch(err => console.error('Failed to save results:', err));
 
@@ -105,7 +109,7 @@ export default function ResultsPage() {
 
   return (
     <div className="bg-slate-900 min-h-screen">
-      <ResultsCard scoreResult={scoreResult} testTitle={testTitle} />
+      <ResultsCard scoreResult={scoreResult} testTitle={testTitle} theme={theme} />
 
       <div className="max-w-2xl mx-auto px-4 pb-12 flex gap-4">
         <button
