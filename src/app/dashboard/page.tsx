@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { BarChart3, TrendingUp, Calendar, Trophy } from 'lucide-react';
+import { getGradeColor } from '@/lib/scoring/calculator';
 
 interface UserTestResult {
   id: string;
@@ -63,23 +64,6 @@ export default function DashboardPage() {
 
     loadDashboard();
   }, []);
-
-  const getGradeColor = (grade: string) => {
-    switch (grade) {
-      case 'A':
-        return 'text-green-400';
-      case 'B':
-        return 'text-blue-400';
-      case 'C':
-        return 'text-yellow-400';
-      case 'D':
-        return 'text-orange-400';
-      case 'F':
-        return 'text-red-400';
-      default:
-        return 'text-slate-400';
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-900 text-white py-12 px-4">
