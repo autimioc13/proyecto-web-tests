@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
 
 /**
  * POST /api/privacy/request-deletion
@@ -12,14 +11,15 @@ import crypto from 'crypto';
  * 4. We delete account + data
  */
 
-interface DeletionRequest {
+interface DeletionRequestPayload {
   email: string;
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = (await request.json()) as DeletionRequest;
+    const { email } = (await request.json()) as DeletionRequestPayload;
 
+    // Validate email
     if (!email || !email.includes('@')) {
       return NextResponse.json(
         { error: 'Email válido requerido' },
@@ -27,37 +27,56 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate confirmation token (valid for 48 hours)
-    const confirmationToken = crypto.randomBytes(32).toString('hex');
-    const expiresAt = new Date(Date.now() + 48 * 60 * 60 * 1000).toISOString();
+    // Dynamic imports to avoid Prisma client initialization at build time
+    const { createDeletionRequest } = await import('@/lib/db/deletionRequest');
+    const { sendDeletionConfirmationEmail } = await import('@/lib/email/sendgrid');
 
-    // In production, store this in database:
-    // await db.deletionRequests.create({
-    //   email,
-    //   confirmationToken,
-    //   expiresAt,
-    //   createdAt: new Date().toISOString(),
-    // });
+    // Get IP address from request headers
+    const ipAddress = request.headers.get('x-forwarded-for') ||
+                     request.headers.get('x-real-ip') ||
+                     'unknown';
 
-    // In production, send email via SendGrid:
-    // await sendDeleteConfirmationEmail({
-    //   email,
-    //   confirmationLink: `https://quizlab.com/api/privacy/confirm-deletion?token=${confirmationToken}`,
-    //   expiresIn: '48 hours'
-    // });
+    const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    console.log(`[DELETION REQUEST] Email: ${email}, Token: ${confirmationToken}, Expires: ${expiresAt}`);
+    // Create deletion request in database
+    // Note: createDeletionRequest already calls createActivityLog internally
+    const deletionRequest = await createDeletionRequest({
+      email,
+      ipAddress,
+      userAgent,
+    });
+
+    // Send confirmation email
+    await sendDeletionConfirmationEmail(
+      email,
+      deletionRequest.confirmationToken,
+      48 // hours
+    );
+
+    console.log(`✓ Deletion request created: ${email}, token expires: ${deletionRequest.tokenExpiresAt}`);
 
     return NextResponse.json({
       success: true,
       message: 'Email de confirmación enviado',
-      expiresAt,
+      deletionRequestId: deletionRequest.id,
+      email: email,
+      expiresAt: deletionRequest.tokenExpiresAt,
+      status: 'pending',
     });
 
   } catch (error) {
     console.error('Error in request-deletion:', error);
+
+    // Check if it's a known error (e.g., duplicate pending request)
+    if (error instanceof Error && error.message.includes('already exists')) {
+      return NextResponse.json(
+        { error: 'Ya existe una solicitud de eliminación pendiente para este email' },
+        { status: 409 } // Conflict
+      );
+    }
+
     return NextResponse.json(
-      { error: 'Error procesando solicitud' },
+      { error: 'Error procesando solicitud de eliminación' },
       { status: 500 }
     );
   }
