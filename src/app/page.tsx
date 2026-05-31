@@ -1,6 +1,8 @@
 import { getAllQuizzes, getTrendingQuizzes } from '@/data/helpers';
 import { getAllSilos } from '@/data/silos';
+import { fetchTestCategories } from '@/lib/api/tests';
 import QuizCard from '@/components/QuizCard';
+import TestCard from '@/components/tests/TestCard';
 import AdSlot from '@/components/AdSlot';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -9,22 +11,58 @@ export default async function Home() {
   const allQuizzes = await getAllQuizzes();
   const trendingQuizzes = await getTrendingQuizzes(4);
   const silos = getAllSilos();
+  const testCategories = await fetchTestCategories();
 
   return (
     <div className="space-y-16 py-12">
       {/* HERO SECTION */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 px-4">
+      <section className="bg-gradient-to-r from-slate-900 via-purple-800 to-slate-900 text-white py-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
-            ¿Quién Eres Realmente?
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+            Tests que revelan quién eres realmente
           </h1>
-          <p className="text-lg sm:text-xl mb-8 text-blue-100 max-w-2xl mx-auto">
-            Descubre tu personalidad, prueba tu conocimiento y aprende hechos sorprendentes con
-            nuestros tests interactivos y virales.
+          <p className="text-lg sm:text-xl mb-8 text-purple-200 max-w-3xl mx-auto">
+            Descubre tu personalidad, prueba tu conocimiento y aprende hechos sorprendentes con nuestros tests interactivos y virales.
           </p>
-          <Link href="/personalidad" className="btn-primary bg-white text-blue-600 hover:bg-gray-100 inline-block">
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-12">
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+              <div className="text-3xl font-bold text-purple-300">250+</div>
+              <div className="text-sm text-purple-200 mt-2">Tests Disponibles</div>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+              <div className="text-3xl font-bold text-purple-300">1M+</div>
+              <div className="text-sm text-purple-200 mt-2">Usuarios Activos</div>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+              <div className="text-3xl font-bold text-purple-300">98%</div>
+              <div className="text-sm text-purple-200 mt-2">Satisfacción</div>
+            </div>
+            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+              <div className="text-3xl font-bold text-purple-300">100%</div>
+              <div className="text-sm text-purple-200 mt-2">Precisión Científica</div>
+            </div>
+          </div>
+
+          <Link href="/personalidad" className="btn-primary bg-white text-purple-600 hover:bg-gray-100 inline-block">
             Comenzar Ahora →
           </Link>
+        </div>
+      </section>
+
+      {/* TEST CATEGORIES SECTION */}
+      <section className="max-w-7xl mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Categorías de Tests</h2>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Explora diferentes tipos de tests diseñados para descubrir aspectos únicos de tu personalidad e inteligencia.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testCategories.map((category) => (
+            <TestCard key={category.id} category={category} />
+          ))}
         </div>
       </section>
 
