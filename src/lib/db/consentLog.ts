@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db/client';
 import { ConsentLog } from '@prisma/client';
+import { createActivityLog } from '@/lib/db/activityLog';
 
 export interface CreateConsentLogInput {
   userId: string;
@@ -32,6 +33,19 @@ export async function createConsentLog(
         ipAddress: input.ipAddress || null,
         userAgent: input.userAgent || null,
         timestamp: new Date(),
+      },
+    });
+
+    // Add GDPR audit trail
+    await createActivityLog({
+      userId: input.userId,
+      activityType: input.accepted ? 'consent_given' : 'consent_withdrawn',
+      resource: 'consent',
+      resourceId: log.id,
+      details: {
+        consentType: input.consentType,
+        version: input.version,
+        accepted: input.accepted,
       },
     });
 
@@ -84,23 +98,26 @@ export async function getUserLatestConsents(
   userId: string
 ): Promise<Record<string, ConsentLog | null>> {
   try {
-    const types = ['privacy_policy', 'cookies', 'marketing', 'analytics'];
+    const logs = await prisma.consentLog.findMany({
+      where: { userId },
+      orderBy: { timestamp: 'desc' },
+    });
 
-    const latestConsents: Record<string, ConsentLog | null> = {};
+    const latestByType: Record<string, ConsentLog | null> = {
+      privacy_policy: null,
+      cookies: null,
+      marketing: null,
+      analytics: null,
+    };
 
-    for (const type of types) {
-      const latest = await prisma.consentLog.findFirst({
-        where: {
-          userId,
-          consentType: type,
-        },
-        orderBy: { timestamp: 'desc' },
-      });
-
-      latestConsents[type] = latest || null;
+    // Group by type, keep only first (latest) of each
+    for (const log of logs) {
+      if (!latestByType[log.consentType]) {
+        latestByType[log.consentType] = log;
+      }
     }
 
-    return latestConsents;
+    return latestByType;
   } catch (error) {
     console.error('Failed to fetch latest consent status:', error);
     throw new Error('Failed to retrieve consent status');
@@ -116,6 +133,13 @@ export async function getConsentLogsByType(
   offset: number = 0
 ): Promise<ConsentLogsResponse> {
   try {
+    const validTypes = ['privacy_policy', 'cookies', 'marketing', 'analytics'];
+    if (!validTypes.includes(consentType)) {
+      throw new Error(
+        `Invalid consent type: ${consentType}. Must be one of: ${validTypes.join(', ')}`
+      );
+    }
+
     const [data, total] = await Promise.all([
       prisma.consentLog.findMany({
         where: { consentType },
@@ -147,6 +171,13 @@ export async function getConsentStatistics(
   endDate: Date
 ): Promise<Record<string, { accepted: number; rejected: number; total: number }>> {
   try {
+    if (startDate >= endDate) {
+      throw new Error('Invalid date range: startDate must be before endDate');
+    }
+    if ((endDate.getTime() - startDate.getTime()) > 365 * 24 * 60 * 60 * 1000) {
+      throw new Error('Date range exceeds 1 year limit for performance');
+    }
+
     const types = ['privacy_policy', 'cookies', 'marketing', 'analytics'];
 
     const stats: Record<string, { accepted: number; rejected: number; total: number }> = {};
@@ -191,6 +222,13 @@ export async function hasUserConsented(
   consentType: string
 ): Promise<boolean> {
   try {
+    const validTypes = ['privacy_policy', 'cookies', 'marketing', 'analytics'];
+    if (!validTypes.includes(consentType)) {
+      throw new Error(
+        `Invalid consent type: ${consentType}. Must be one of: ${validTypes.join(', ')}`
+      );
+    }
+
     const latest = await prisma.consentLog.findFirst({
       where: {
         userId,
@@ -208,6 +246,8 @@ export async function hasUserConsented(
 
 /**
  * Get consent logs with version changes (for policy update tracking)
+ * Note: Returns all version change logs, not distinct user-version combinations.
+ * For distinct records per user per version, use application-level filtering.
  */
 export async function getConsentVersionChanges(
   consentType: string,
@@ -221,7 +261,6 @@ export async function getConsentVersionChanges(
         orderBy: { timestamp: 'desc' },
         take: limit,
         skip: offset,
-        distinct: ['userId', 'version'],
       }),
       prisma.consentLog.count({
         where: { consentType },
