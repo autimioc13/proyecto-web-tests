@@ -2,12 +2,15 @@
 
 import Link from 'next/link';
 import { TestCategory } from '@/lib/api/tests';
+import { getCategoryTheme } from '@/lib/themes/categoryThemes';
 
 interface TestCardProps {
   category: TestCategory;
 }
 
 export default function TestCard({ category }: TestCardProps) {
+  const theme = getCategoryTheme(category.id);
+
   return (
     <Link href={`/tests?category=${category.id}`}>
       <div
@@ -15,7 +18,7 @@ export default function TestCard({ category }: TestCardProps) {
       >
         {/* Gradient Background */}
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-90 group-hover:opacity-100 transition-opacity`}
+          className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-90 group-hover:opacity-100 transition-opacity`}
         />
 
         {/* Content */}
