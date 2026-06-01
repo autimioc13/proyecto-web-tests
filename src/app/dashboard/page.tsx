@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { BarChart3, TrendingUp, Calendar, Trophy } from 'lucide-react';
 import { getGradeColor } from '@/lib/scoring/calculator';
 import { getCategoryTheme } from '@/lib/themes/categoryThemes';
+import { createClient } from '@/lib/supabase/client';
 
 interface UserTestResult {
   id: string;
@@ -26,6 +27,7 @@ export default function DashboardPage() {
     totalTimeSpent: 0,
   });
   const [loading, setLoading] = useState(true);
+  const [realtimeActive, setRealtimeActive] = useState(false);
 
   useEffect(() => {
     const loadDashboard = async () => {
@@ -56,6 +58,62 @@ export default function DashboardPage() {
             passedTests: passedCount,
             totalTimeSpent: totalTime,
           });
+        }
+
+        // NOVO: Setup Realtime subscription
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (user?.id) {
+          const subscription = supabase
+            .channel('results')
+            .on(
+              'postgres_changes',
+              {
+                event: 'INSERT',
+                schema: 'public',
+                table: 'results',
+                filter: `user_id=eq.${user.id}`,
+              },
+              (payload) => {
+                // When a new result is inserted
+                const newResult: UserTestResult = {
+                  id: payload.new.id,
+                  testId: payload.new.test_id,
+                  testTitle: payload.new.test_title,
+                  categoryId: payload.new.category_id,
+                  score: payload.new.score,
+                  grade: payload.new.grade,
+                  completedAt: payload.new.completed_at,
+                  timeSpent: payload.new.time_spent,
+                };
+                setTestResults((prev) => [newResult, ...prev]);
+
+                // Update stats
+                setStats((prevStats) => {
+                  const newPassedCount = newResult.score >= 60 ? 1 : 0;
+                  const totalTests = prevStats.totalTests + 1;
+                  const totalScore = prevStats.averageScore * prevStats.totalTests + newResult.score;
+                  const newAvgScore = Math.round(totalScore / totalTests);
+                  const newPassedTests = prevStats.passedTests + newPassedCount;
+                  const newTotalTime = prevStats.totalTimeSpent + newResult.timeSpent;
+
+                  return {
+                    totalTests,
+                    averageScore: newAvgScore,
+                    passedTests: newPassedTests,
+                    totalTimeSpent: newTotalTime,
+                  };
+                });
+              }
+            )
+            .subscribe();
+
+          setRealtimeActive(true);
+
+          return () => {
+            subscription.unsubscribe();
+          };
         }
       } catch (err) {
         console.error('Error loading dashboard:', err);
