@@ -3,6 +3,7 @@ import { DEFAULT_METADATA } from '@/lib/metadata';
 import Navigation from '@/components/nav/Navigation';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
+import AnimatedGradient from '@/components/backgrounds/AnimatedGradient';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -64,11 +65,13 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="bg-white text-gray-900 antialiased">
-        <Navigation />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <CookieConsentBanner />
+      <body className="text-gray-900 antialiased">
+        <AnimatedGradient>
+          <Navigation />
+          <main className="min-h-screen relative z-10">{children}</main>
+          <Footer />
+          <CookieConsentBanner />
+        </AnimatedGradient>
       </body>
     </html>
   );
