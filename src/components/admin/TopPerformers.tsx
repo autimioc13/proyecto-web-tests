@@ -4,12 +4,11 @@ import { Trophy, Star } from 'lucide-react';
 
 interface TopPerformer {
   rank: number;
-  quizName: string;
-  category: string;
-  icon: string;
-  completed: number;
-  revenue: number;
-  rating: number;
+  quizSlug?: string;
+  silo?: string;
+  completed?: number;
+  revenue?: number;
+  rating?: number;
 }
 
 export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
@@ -37,20 +36,20 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
                   <span className="text-4xl">{medal.medal}</span>
                   
                   <div>
-                    <h3 className="font-bold text-lg text-gray-900">{perf.quizName}</h3>
-                    <p className="text-sm text-gray-600">{perf.category} {perf.icon}</p>
+                    <h3 className="font-bold text-lg text-gray-900">{perf.quizSlug || 'Quiz'}</h3>
+                    <p className="text-sm text-gray-600">{perf.silo || 'general'}</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-8 text-right">
                   <div>
                     <p className="text-gray-600 text-xs">Completados</p>
-                    <p className="text-2xl font-bold text-gray-900">{perf.completed}</p>
+                    <p className="text-2xl font-bold text-gray-900">{perf.completed || 0}</p>
                   </div>
 
                   <div>
                     <p className="text-gray-600 text-xs">Ingresos</p>
-                    <p className="text-2xl font-bold text-green-600">${perf.revenue}</p>
+                    <p className="text-2xl font-bold text-green-600">${perf.revenue || 0}</p>
                   </div>
 
                   <div className="flex gap-1">
@@ -58,7 +57,7 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
                       <Star
                         key={i}
                         size={18}
-                        className={i < perf.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                        className={i < (perf.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
                       />
                     ))}
                   </div>
