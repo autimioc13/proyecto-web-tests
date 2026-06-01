@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { getRandomGradient, GRADIENT_ANIMATIONS, type GradientStyle } from '@/lib/gradient-utils';
+import { getRandomGradient, type GradientStyle } from '@/lib/gradient-utils';
 
 interface AnimatedGradientProps {
   children?: React.ReactNode;
@@ -22,41 +22,39 @@ export default function AnimatedGradient({
   const [nextGradient, setNextGradient] = useState<GradientStyle>(() =>
     getRandomGradient()
   );
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | null = null;
+
     const interval = setInterval(() => {
-      setIsTransitioning(true);
       setCurrentGradient(nextGradient);
       setNextGradient(getRandomGradient());
 
-      const transitionTimer = setTimeout(() => {
-        setIsTransitioning(false);
-      }, 2000);
-
-      return () => clearTimeout(transitionTimer);
+      // Clean up previous timeout if it exists
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     }, duration);
 
-    return () => clearInterval(interval);
-  }, [duration, nextGradient]);
+    return () => {
+      clearInterval(interval);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, [duration]);
 
   const containerClass = fixed
     ? `fixed inset-0 -z-10 w-full h-full ${className}`
     : `w-full ${className}`;
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: GRADIENT_ANIMATIONS }} />
-      <div
-        className={containerClass}
-        style={{
-          background: `linear-gradient(135deg, ${currentGradient.from} 0%, ${currentGradient.to} 100%)`,
-          backgroundSize: '200% 200%',
-          transition: isTransitioning ? 'background 2s ease-in-out' : 'none',
-          animation: 'gradientShift 8s ease infinite',
-        }}
-      />
-      {children}
-    </>
+    <div
+      className={containerClass}
+      style={{
+        background: `linear-gradient(135deg, ${currentGradient.from} 0%, ${currentGradient.to} 100%)`,
+        transition: 'background 2s ease-in-out',
+      }}
+    />
   );
 }

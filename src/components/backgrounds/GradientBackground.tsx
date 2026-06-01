@@ -1,5 +1,4 @@
 import React from 'react';
-import { GRADIENT_ANIMATIONS } from '@/lib/gradient-utils';
 
 interface GradientBackgroundProps {
   fromColor: string;
@@ -12,23 +11,17 @@ interface GradientBackgroundProps {
 export default function GradientBackground({
   fromColor,
   toColor,
-  animated = false,
   children,
   className = '',
 }: GradientBackgroundProps) {
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: GRADIENT_ANIMATIONS }} />
-      <div
-        className={`relative w-full ${className}`}
-        style={{
-          background: `linear-gradient(135deg, ${fromColor} 0%, ${toColor} 100%)`,
-          backgroundSize: '200% 200%',
-          animation: animated ? 'gradientShift 8s ease infinite' : 'none',
-        }}
-      >
-        {children}
-      </div>
-    </>
+    <div
+      className={`relative w-full ${className}`}
+      style={{
+        background: `linear-gradient(135deg, ${fromColor} 0%, ${toColor} 100%)`,
+      }}
+    >
+      {children}
+    </div>
   );
 }

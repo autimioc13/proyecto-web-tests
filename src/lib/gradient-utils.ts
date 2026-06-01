@@ -57,38 +57,3 @@ export function getRandomGradient(): GradientStyle {
   return GRADIENT_MAP[random];
 }
 
-/**
- * Generate inline CSS for gradient background
- */
-export function generateGradientStyle(
-  fromColor: string,
-  toColor: string,
-  animated: boolean = false
-): string {
-  const base = `
-    background: linear-gradient(135deg, ${fromColor} 0%, ${toColor} 100%);
-    background-size: 200% 200%;
-  `;
-
-  if (animated) {
-    return `${base}animation: gradientShift 8s ease infinite;`;
-  }
-
-  return base;
-}
-
-/**
- * Keyframe animations for gradients
- */
-export const GRADIENT_ANIMATIONS = `
-  @keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-  }
-`;
