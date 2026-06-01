@@ -3,7 +3,7 @@ import MetricsCard from '@/components/admin/MetricsCard';
 import DiagnosticBox from '@/components/admin/DiagnosticBox';
 import { TestsRankingTable } from '@/components/admin/TestsRankingTable';
 import { CategoryDashboards } from '@/components/admin/CategoryDashboards';
-import RevenueChart from '@/components/admin/RevenueChart';
+import { RevenueChart } from '@/components/admin/RevenueChart';
 import { TopPerformers } from '@/components/admin/TopPerformers';
 import { ActivityFeed } from '@/components/admin/ActivityFeed';
 import { DollarSign, BarChart3, Sparkles } from 'lucide-react';
