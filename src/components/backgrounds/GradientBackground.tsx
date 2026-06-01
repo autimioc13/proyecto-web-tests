@@ -1,5 +1,5 @@
 import React from 'react';
-import { generateGradientStyle, GRADIENT_ANIMATIONS } from '@/lib/gradient-utils';
+import { GRADIENT_ANIMATIONS } from '@/lib/gradient-utils';
 
 interface GradientBackgroundProps {
   fromColor: string;
@@ -16,8 +16,6 @@ export default function GradientBackground({
   children,
   className = '',
 }: GradientBackgroundProps) {
-  const gradientStyle = generateGradientStyle(fromColor, toColor, animated);
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: GRADIENT_ANIMATIONS }} />
