@@ -49,12 +49,15 @@ export default function AnimatedGradient({
     : `w-full ${className}`;
 
   return (
-    <div
-      className={containerClass}
-      style={{
-        background: `linear-gradient(135deg, ${currentGradient.from} 0%, ${currentGradient.to} 100%)`,
-        transition: 'background 2s ease-in-out',
-      }}
-    />
+    <>
+      <div
+        className={containerClass}
+        style={{
+          background: `linear-gradient(135deg, ${currentGradient.from} 0%, ${currentGradient.to} 100%)`,
+          transition: 'background 2s ease-in-out',
+        }}
+      />
+      {children}
+    </>
   );
 }
