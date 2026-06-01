@@ -2,6 +2,7 @@ import { getDataAdapter } from '@/lib/data';
 import MetricsCard from '@/components/admin/MetricsCard';
 import DiagnosticBox from '@/components/admin/DiagnosticBox';
 import { TestsRankingTable } from '@/components/admin/TestsRankingTable';
+import { CategoryDashboards } from '@/components/admin/CategoryDashboards';
 import RevenueChart from '@/components/admin/RevenueChart';
 import { TopPerformers } from '@/components/admin/TopPerformers';
 import { ActivityFeed } from '@/components/admin/ActivityFeed';
