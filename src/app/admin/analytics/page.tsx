@@ -3,6 +3,8 @@ import MetricsCard from '@/components/admin/MetricsCard';
 import DiagnosticBox from '@/components/admin/DiagnosticBox';
 import { TestsRankingTable } from '@/components/admin/TestsRankingTable';
 import RevenueChart from '@/components/admin/RevenueChart';
+import { TopPerformers } from '@/components/admin/TopPerformers';
+import { ActivityFeed } from '@/components/admin/ActivityFeed';
 import { DollarSign, BarChart3, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,6 +34,66 @@ export default async function AdminAnalytics() {
     { date: 'Semana 3', ingresos: 180, usuarios: 52, completados: 38 },
     { date: 'Semana 4', ingresos: 420, usuarios: 89, completados: 64 },
     { date: 'Esta Semana', ingresos: 380, usuarios: 78, completados: 58 },
+  ];
+
+  // Mock activities data for real-time activity feed
+  const mockActivities = [
+    {
+      id: '1',
+      type: 'live' as const,
+      emoji: '🔴',
+      message: 'María García está completando "General Knowledge Quiz"',
+      timestamp: 'Just now',
+    },
+    {
+      id: '2',
+      type: 'completion' as const,
+      emoji: '✅',
+      message: 'Juan Pérez completó "Science Basics" - $2.50 USD',
+      timestamp: '1 min ago',
+    },
+    {
+      id: '3',
+      type: 'share' as const,
+      emoji: '📤',
+      message: 'Ana López compartió "History 101" en redes sociales',
+      timestamp: '3 min ago',
+    },
+    {
+      id: '4',
+      type: 'generation' as const,
+      emoji: '🤖',
+      message: 'IA generó 5 nuevos tests automáticamente',
+      timestamp: '5 min ago',
+    },
+    {
+      id: '5',
+      type: 'start' as const,
+      emoji: '⚡',
+      message: 'Carlos Mendez inició "Biology Expert Test"',
+      timestamp: '7 min ago',
+    },
+    {
+      id: '6',
+      type: 'completion' as const,
+      emoji: '✅',
+      message: 'Sofia Ruiz completó "Math Challenge" - $3.75 USD',
+      timestamp: '12 min ago',
+    },
+    {
+      id: '7',
+      type: 'share' as const,
+      emoji: '📤',
+      message: 'Roberto Sánchez compartió "Technology Quiz" en WhatsApp',
+      timestamp: '15 min ago',
+    },
+    {
+      id: '8',
+      type: 'start' as const,
+      emoji: '⚡',
+      message: 'Laura Fernández inició "English Proficiency Test"',
+      timestamp: '20 min ago',
+    },
   ];
 
   return (
@@ -89,8 +151,24 @@ export default async function AdminAnalytics() {
         {/* Gráfico de Tendencia de Ingresos */}
         <RevenueChart data={revenueData} />
 
+        {/* Top Performers Gamificado */}
+        <TopPerformers
+          performers={allMetrics.slice(0, 10).map((m, idx) => ({
+            rank: idx + 1,
+            quizSlug: m.quizSlug,
+            silo: m.silo,
+            completed: m.totalCompletes,
+            revenue: m.estRevenue,
+            rating: Math.min(5, Math.ceil((m.completionRate / 20))),
+            completionRate: m.completionRate,
+          }))}
+        />
+
         {/* Diagnóstico */}
         <DiagnosticBox metrics={allMetrics} />
+
+        {/* Activity Feed Real-time */}
+        <ActivityFeed activities={mockActivities} />
 
         {/* Tabla de tests mejorada */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
