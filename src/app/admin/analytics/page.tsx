@@ -1,6 +1,8 @@
 import { getDataAdapter } from '@/lib/data';
 import MetricsCard from '@/components/admin/MetricsCard';
 import DiagnosticBox from '@/components/admin/DiagnosticBox';
+import { TestsRankingTable } from '@/components/admin/TestsRankingTable';
+import RevenueChart from '@/components/admin/RevenueChart';
 import { DollarSign, BarChart3, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 
@@ -22,6 +24,15 @@ export default async function AdminAnalytics() {
       : 0;
 
   const totalRevenueUSD = totalRevenue / 1000000;
+
+  // Datos de ejemplo para gráfico de tendencia (reemplazar con datos reales de BD después)
+  const revenueData = [
+    { date: 'Semana 1', ingresos: 120, usuarios: 45, completados: 32 },
+    { date: 'Semana 2', ingresos: 240, usuarios: 65, completados: 48 },
+    { date: 'Semana 3', ingresos: 180, usuarios: 52, completados: 38 },
+    { date: 'Semana 4', ingresos: 420, usuarios: 89, completados: 64 },
+    { date: 'Esta Semana', ingresos: 380, usuarios: 78, completados: 58 },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 py-12 px-4">
@@ -75,45 +86,19 @@ export default async function AdminAnalytics() {
           </div>
         </div>
 
+        {/* Gráfico de Tendencia de Ingresos */}
+        <RevenueChart data={revenueData} />
+
         {/* Diagnóstico */}
         <DiagnosticBox metrics={allMetrics} />
 
-        {/* Tabla de tests */}
+        {/* Tabla de tests mejorada */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-2xl font-bold">Tests Ranking por RPM</h2>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Test</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Silo</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Inicios</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Completadas</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">% Compl.</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">Impresiones</th>
-                  <th className="px-6 py-3 text-xs font-semibold text-gray-600 uppercase">RPM</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {allMetrics.map((m) => (
-                  <tr key={m.quizSlug} className="hover:bg-gray-50 transition">
-                    <td className="px-6 py-4 font-semibold text-gray-900">{m.quizSlug}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.silo}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.totalStarts}</td>
-                    <td className="px-6 py-4 text-sm font-semibold text-green-600">{m.totalCompletes}</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.completionRate}%</td>
-                    <td className="px-6 py-4 text-sm text-gray-600">{m.totalImpressions}</td>
-                    <td className="px-6 py-4 font-bold text-emerald-600">
-                      ${(m.rpm / 1000000).toFixed(2)}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <TestsRankingTable data={allMetrics} />
         </div>
 
         {/* Cards detalladas */}
