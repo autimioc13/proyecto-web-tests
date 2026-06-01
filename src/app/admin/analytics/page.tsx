@@ -152,6 +152,9 @@ export default async function AdminAnalytics() {
         {/* Gráfico de Tendencia de Ingresos */}
         <RevenueChart data={revenueData} />
 
+        {/* Mini-Dashboards por Categoría */}
+        <CategoryDashboards metrics={allMetrics} />
+
         {/* Top Performers Gamificado */}
         <TopPerformers
           performers={allMetrics.slice(0, 10).map((m, idx) => ({
