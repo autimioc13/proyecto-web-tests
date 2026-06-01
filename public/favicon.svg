@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle background -->
+  <circle cx="100" cy="100" r="100" fill="url(#grad)"/>
+  
+  <!-- Brain icon -->
+  <g transform="translate(50, 50)">
+    <!-- Brain shape -->
+    <path d="M50 20 Q60 30 60 45 Q60 55 55 60 L55 70 Q55 75 50 75 L50 70 Q45 75 40 75 L40 70 Q35 65 35 60 Q30 55 30 45 Q30 30 40 20 Q45 15 50 15 Q55 15 60 20" 
+          fill="white" stroke="white" stroke-width="2"/>
+    
+    <!-- Left hemisphere detail -->
+    <circle cx="40" cy="45" r="8" fill="rgba(255,255,255,0.3)"/>
+    
+    <!-- Right hemisphere detail -->
+    <circle cx="60" cy="45" r="8" fill="rgba(255,255,255,0.3)"/>
+    
+    <!-- Bottom connection -->
+    <rect x="48" y="65" width="4" height="15" fill="white"/>
+  </g>
+  
+  <!-- Question mark accent -->
+  <text x="170" y="50" font-size="60" fill="white" opacity="0.8" font-weight="bold">?</text>
+</svg>
