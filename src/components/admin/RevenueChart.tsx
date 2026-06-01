@@ -1,7 +1,5 @@
 'use client';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
 interface RevenueDataPoint {
   date: string;
   ingresos: number;
@@ -9,45 +7,45 @@ interface RevenueDataPoint {
   completados: number;
 }
 
-interface RevenueChartProps {
-  data: RevenueDataPoint[];
-}
-
-export default function RevenueChart({ data }: RevenueChartProps) {
+export function RevenueChart({ data }: { data: RevenueDataPoint[] }) {
+  const maxIngresos = Math.max(...data.map(d => d.ingresos));
+  
   return (
-    <div className="mt-8 bg-white rounded-lg border border-gray-200 p-6">
+    <div className="bg-white rounded-lg border border-gray-200 p-6">
       <h3 className="text-lg font-bold mb-4">📈 Tendencia de Ingresos</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="date" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line
-            type="monotone"
-            dataKey="ingresos"
-            stroke="#8b5cf6"
-            strokeWidth={2}
-            dot={{ fill: '#8b5cf6', r: 5 }}
-            name="Ingresos ($)"
-          />
-          <Line
-            type="monotone"
-            dataKey="usuarios"
-            stroke="#3b82f6"
-            strokeWidth={2}
-            name="Usuarios"
-          />
-          <Line
-            type="monotone"
-            dataKey="completados"
-            stroke="#10b981"
-            strokeWidth={2}
-            name="Tests Completados"
-          />
-        </LineChart>
-      </ResponsiveContainer>
+      
+      <div className="space-y-6">
+        {data.map((point) => (
+          <div key={point.date} className="border-b border-gray-200 pb-4 last:border-0">
+            <div className="flex justify-between items-center mb-2">
+              <span className="font-medium text-gray-900">{point.date}</span>
+              <span className="text-2xl font-bold text-purple-600">${point.ingresos}</span>
+            </div>
+            
+            <div className="flex gap-4 text-sm">
+              <div className="flex-1">
+                <p className="text-gray-600 mb-1">Usuarios: {point.usuarios}</p>
+                <div className="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-blue-600"
+                    style={{ width: `${(point.usuarios / 100) * 100}%` }}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex-1">
+                <p className="text-gray-600 mb-1">Completados: {point.completados}</p>
+                <div className="w-full h-2 bg-green-200 rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-green-600"
+                    style={{ width: `${(point.completados / 100) * 100}%` }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
