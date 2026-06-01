@@ -1,4 +1,5 @@
 import { Quiz } from '@/types';
+import storeData from '../../public/data/quizzes-store.json';
 
 let cachedStore: { quizzes: Quiz[] } | null = null;
 
@@ -6,10 +7,10 @@ export const loadStore = async (): Promise<Quiz[]> => {
   if (cachedStore) return cachedStore.quizzes;
 
   try {
-    const res = await fetch('/data/quizzes-store.json');
-    const data = await res.json();
-    // Handle both array format and object format
-    const quizzes = Array.isArray(data) ? data : (data.quizzes || []);
+    const data = Array.isArray(storeData)
+      ? storeData
+      : ((storeData as any).quizzes || []);
+    const quizzes = data as Quiz[];
     cachedStore = { quizzes };
     return quizzes;
   } catch {
