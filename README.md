@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧠 QuizLab - Psychology-Based Assessment Platform
 
-## Getting Started
+> Discover who you really are through interactive, personality-based quizzes with scientifically-designed color psychology.
 
-First, run the development server:
+## 🎯 Overview
+
+**QuizLab** es una plataforma moderna de quizzes interactivos categorizados con esquemas de colores basados en psicología. Cada categoría de quiz utiliza paletas de colores distintas científicamente probadas para estimular funciones cognitivas específicas.
+
+### Categorías de Tests
+- 🔵 **Inteligencia** (Azul) - Clarity cognitiva y enfoque
+- 💜 **Personalidad** (Púrpura) - Reflexión personal
+- 💚 **Lógica** (Verde) - Resolución de problemas
+- 🟡 **Conocimiento** (Ámbar) - Aprendizaje y sabiduría
+- 🟠 **Productividad** (Naranja) - Acción y energía
+- 💗 **Curiosidades** (Rosa) - Creatividad y asombro
+
+## 🛠 Tech Stack
+
+### Frontend
+- **Next.js 16** - App Router, SSG, Server Components
+- **React 19** - UI components
+- **Tailwind CSS v3** - Psychology of Colors theme system
+- **TypeScript** - Type-safe development
+
+### Backend
+- **Supabase** - PostgreSQL + OAuth (Google/GitHub)
+- **Supabase Realtime** - Live updates
+- **Row Level Security** - Data isolation
+
+### Deployment
+- **Vercel** - Continuous deployment
+- **GitHub** - Version control
+
+## 🚀 Quick Start
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🌐 Live URL
+👉 **[proyecto-web-tests.vercel.app](https://proyecto-web-tests.vercel.app)**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📋 Project Phases
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- ✅ **FASE 1** - Infrastructure setup
+- ✅ **FASE 2** - Backend APIs & GDPR compliance  
+- ✅ **FASE 3** - Frontend with psychology-of-colors
+- ✅ **FASE 4** - Supabase integration & auth
+- 🚀 **LIVE** - Production deployment
 
-## Learn More
+## 🎨 Features
 
-To learn more about Next.js, take a look at the following resources:
+- 🎯 Interactive psychology-based quizzes
+- 🎨 Color psychology theme system (6 distinct palettes)
+- 🔐 OAuth authentication (Google + GitHub)
+- 📊 User dashboard with test history
+- ⚡ Real-time updates (Supabase Realtime)
+- 📱 Responsive design
+- 🛡️ GDPR compliant (data export, deletion)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🔐 Security
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Row Level Security (RLS) on all tables
+- Server-side authentication checks
+- Secure API routes with user verification
+- Activity logging for audit trails
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Status:** 🟢 Production Ready
+**Last Updated:** June 1, 2026
