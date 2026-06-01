@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
+import AuthButtons from '@/components/auth/AuthButtons';
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -33,12 +34,7 @@ export default function Navigation() {
             <Link href="/dashboard" className="text-slate-300 hover:text-white transition">
               Dashboard
             </Link>
-            <Link
-              href="/account"
-              className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded transition"
-            >
-              Mi Cuenta
-            </Link>
+            <AuthButtons />
           </div>
 
           {/* Mobile Menu Button */}
@@ -75,13 +71,9 @@ export default function Navigation() {
             >
               Dashboard
             </Link>
-            <Link
-              href="/account"
-              className="block px-4 py-2 text-slate-300 hover:bg-slate-700 transition"
-              onClick={closeMobileMenu}
-            >
-              Mi Cuenta
-            </Link>
+            <div className="block px-4 py-2" onClick={closeMobileMenu}>
+              <AuthButtons />
+            </div>
           </div>
         )}
       </div>
