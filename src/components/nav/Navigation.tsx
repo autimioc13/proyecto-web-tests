@@ -5,10 +5,12 @@ import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import AuthButtons from '@/components/auth/AuthButtons';
 import { useTheme } from '@/components/providers/ThemeProvider';
+import { useSoundContext } from '@/lib/contexts/SoundContext';
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isDark, setTheme } = useTheme();
+  const { soundEnabled, toggleSound } = useSoundContext();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
   const closeMobileMenu = () => setMobileMenuOpen(false);
@@ -37,6 +39,13 @@ export default function Navigation() {
               Dashboard
             </Link>
             <button
+              onClick={() => toggleSound()}
+              className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition text-slate-300"
+              title="Toggle sounds"
+            >
+              {soundEnabled ? '🔊' : '🔇'}
+            </button>
+            <button
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
               className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition text-slate-300"
               title="Toggle dark mode"
@@ -45,6 +54,15 @@ export default function Navigation() {
             </button>
             <AuthButtons />
           </div>
+
+          {/* Sound Toggle Button (Mobile) */}
+          <button
+            onClick={() => toggleSound()}
+            className="md:hidden p-2 rounded hover:bg-slate-700 transition text-slate-300"
+            title="Toggle sounds"
+          >
+            {soundEnabled ? '🔊' : '🔇'}
+          </button>
 
           {/* Theme Toggle Button */}
           <button

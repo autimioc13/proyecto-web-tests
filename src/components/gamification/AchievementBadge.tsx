@@ -1,20 +1,32 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Achievement, getRarityGradient, getRarityColor } from '@/lib/achievements';
+import { useSoundContext } from '@/lib/contexts/SoundContext';
 
 interface AchievementBadgeProps {
   achievement: Achievement;
   unlocked?: boolean;
   showAnimation?: boolean;
+  onUnlock?: () => void;
 }
 
 export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
   achievement,
   unlocked = false,
   showAnimation = false,
+  onUnlock,
 }) => {
   const [showTooltip, setShowTooltip] = useState(false);
+  const { playSound } = useSoundContext();
+
+  // Play sound when achievement is unlocked with animation
+  useEffect(() => {
+    if (unlocked && showAnimation) {
+      playSound('achievement', 0.9);
+      onUnlock?.();
+    }
+  }, [unlocked, showAnimation, playSound, onUnlock]);
 
   const bgGradient = getRarityGradient(achievement.rarity);
   const rarityColor = getRarityColor(achievement.rarity);

@@ -7,6 +7,7 @@ import QuizQuestion from './quiz/QuizQuestion';
 import QuizResult from './quiz/QuizResult';
 import { useAnalytics } from '@/hooks/useAnalytics';
 import { calculateResult } from '@/engine/engine';
+import { useSoundContext } from '@/lib/contexts/SoundContext';
 
 type QuizState = 'intro' | 'question' | 'result';
 
@@ -19,7 +20,9 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, string>>(new Map());
   const [result, setResult] = useState<ResultPacket | null>(null);
+  const [levelUpTriggered, setLevelUpTriggered] = useState(false);
   const { trackEvent } = useAnalytics();
+  const { playSound } = useSoundContext();
 
   const handleStart = useCallback(() => {
     setState('question');
@@ -32,16 +35,26 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
   const handleSelectOption = useCallback(
     (optionId: string) => {
       const newAnswers = new Map(answers);
-      newAnswers.set(quiz.questions[currentQuestionIndex].id, optionId);
+      const currentQuestion = quiz.questions[currentQuestionIndex];
+      newAnswers.set(currentQuestion.id, optionId);
       setAnswers(newAnswers);
+
+      // Play sound feedback for answer selection (for trivia quizzes)
+      const isCorrect = currentQuestion.correct && optionId === currentQuestion.correct;
+      if (isCorrect) {
+        playSound('correct', 0.7);
+      } else if (currentQuestion.correct) {
+        // Only play incorrect sound if this is a trivia quiz with correct answers
+        playSound('incorrect', 0.6);
+      }
 
       trackEvent('quiz_question_view', quiz.slug, {
         question_index: currentQuestionIndex,
-        question_id: quiz.questions[currentQuestionIndex].id,
+        question_id: currentQuestion.id,
         selected_option: optionId,
       });
     },
-    [answers, currentQuestionIndex, quiz.slug, quiz.questions, trackEvent]
+    [answers, currentQuestionIndex, quiz.slug, quiz.questions, trackEvent, playSound]
   );
 
   const handleNextQuestion = useCallback(() => {
@@ -64,6 +77,7 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
     setCurrentQuestionIndex(0);
     setAnswers(new Map());
     setResult(null);
+    setLevelUpTriggered(false);
     setState('intro');
 
     trackEvent('quiz_restart', quiz.slug, {});
@@ -107,6 +121,7 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
         result={result}
         onRestart={handleRestart}
         onShare={handleShare}
+        levelUpTriggered={levelUpTriggered}
       />
     );
   }

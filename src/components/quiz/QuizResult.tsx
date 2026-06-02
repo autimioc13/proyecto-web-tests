@@ -6,12 +6,14 @@ import AdSlot from '@/components/AdSlot';
 import { TrendingUp, Award, Heart } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { useSoundContext } from '@/lib/contexts/SoundContext';
 
 interface QuizResultProps {
   quiz: Quiz;
   result: ResultPacket;
   onRestart: () => void;
   onShare: () => void;
+  levelUpTriggered?: boolean;
 }
 
 export default function QuizResult({
@@ -19,12 +21,21 @@ export default function QuizResult({
   result,
   onRestart,
   onShare,
+  levelUpTriggered = false,
 }: QuizResultProps) {
   const [showConfetti, setShowConfetti] = useState(true);
+  const { playSound } = useSoundContext();
 
   useEffect(() => {
     onShare();
   }, [onShare]);
+
+  // Play level-up sound when triggered
+  useEffect(() => {
+    if (levelUpTriggered) {
+      playSound('levelUp', 0.8);
+    }
+  }, [levelUpTriggered, playSound]);
 
   return (
     <div className="space-y-8">
