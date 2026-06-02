@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { GameificationEvents } from '@/lib/analytics';
+import { XP_CONFIG, DifficultyLevel } from '@/lib/xp-config';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -7,12 +8,17 @@ const supabase = createClient(
 );
 
 // XP calculation
-export function calculateXP(score: number, total: number, completionTime: number): number {
-  const baseXP = 100;
+export function calculateXP(
+  score: number,
+  total: number,
+  completionTime: number,
+  difficulty: DifficultyLevel = 'medium'
+): number {
+  const config = XP_CONFIG[difficulty];
   const scoreMultiplier = (score / total) * 100;
-  const timeBonus = Math.max(0, 60 - completionTime / 1000) * 2;
-  const perfectBonus = score === total ? 50 : 0;
-  return Math.round(baseXP * (scoreMultiplier / 100) + timeBonus + perfectBonus);
+  const timeBonus = Math.max(0, 60 - completionTime / 1000) * config.timeBonus;
+  const perfectBonus = score === total ? config.perfectBonus : 0;
+  return Math.round(config.baseXP * (scoreMultiplier / 100) + timeBonus + perfectBonus);
 }
 
 // Level calculation
@@ -41,9 +47,10 @@ export async function recordQuizCompletion(
   quizSlug: string,
   score: number,
   total: number,
-  completionTime: number
+  completionTime: number,
+  difficulty: DifficultyLevel = 'medium'
 ) {
-  const xpEarned = calculateXP(score, total, completionTime);
+  const xpEarned = calculateXP(score, total, completionTime, difficulty);
   const isPerfect = score === total;
 
   // Insert completion record
