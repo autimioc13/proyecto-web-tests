@@ -4,6 +4,7 @@ import Navigation from '@/components/nav/Navigation';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 import AnimatedGradient from '@/components/backgrounds/AnimatedGradient';
+import { SoundProvider } from '@/components/providers/SoundProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -66,12 +67,14 @@ export default function RootLayout({
         />
       </head>
       <body className="text-gray-900 antialiased">
-        <AnimatedGradient>
-          <Navigation />
-          <main className="min-h-screen relative z-10">{children}</main>
-          <Footer />
-          <CookieConsentBanner />
-        </AnimatedGradient>
+        <SoundProvider>
+          <AnimatedGradient>
+            <Navigation />
+            <main className="min-h-screen relative z-10">{children}</main>
+            <Footer />
+            <CookieConsentBanner />
+          </AnimatedGradient>
+        </SoundProvider>
       </body>
     </html>
   );
