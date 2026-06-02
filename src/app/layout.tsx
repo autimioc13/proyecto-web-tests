@@ -1,10 +1,13 @@
 import type { Metadata } from 'next';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { DEFAULT_METADATA } from '@/lib/metadata';
 import Navigation from '@/components/nav/Navigation';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 import AnimatedGradient from '@/components/backgrounds/AnimatedGradient';
 import { SoundProvider } from '@/components/providers/SoundProvider';
+import ThemeProvider from '@/components/providers/ThemeProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -67,14 +70,18 @@ export default function RootLayout({
         />
       </head>
       <body className="text-gray-900 antialiased">
-        <SoundProvider>
-          <AnimatedGradient>
-            <Navigation />
-            <main className="min-h-screen relative z-10">{children}</main>
-            <Footer />
-            <CookieConsentBanner />
-          </AnimatedGradient>
-        </SoundProvider>
+        <ThemeProvider>
+          <SoundProvider>
+            <AnimatedGradient>
+              <Navigation />
+              <main className="min-h-screen relative z-10">{children}</main>
+              <Footer />
+              <CookieConsentBanner />
+            </AnimatedGradient>
+          </SoundProvider>
+        </ThemeProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

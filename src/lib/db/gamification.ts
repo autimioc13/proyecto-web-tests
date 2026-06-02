@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { GameificationEvents } from '@/lib/analytics';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -78,7 +79,11 @@ export async function recordQuizCompletion(
       perfect_scores: isPerfect ? 1 : 0,
       last_activity_date: new Date().toISOString().split('T')[0],
     });
+
+    // Track initial quiz completion
+    GameificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
   } else {
+    const oldLevel = stats.level;
     const newTotalXP = stats.total_xp + xpEarned;
     const newLevel = calculateLevel(newTotalXP);
 
@@ -92,6 +97,14 @@ export async function recordQuizCompletion(
         last_activity_date: new Date().toISOString().split('T')[0],
       })
       .eq('user_id', userId);
+
+    // Track quiz completion
+    GameificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
+
+    // Track level up if it happened
+    if (newLevel > oldLevel) {
+      GameificationEvents.levelUp(newLevel, newTotalXP);
+    }
   }
 
   return { completion, xpEarned };
