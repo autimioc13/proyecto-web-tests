@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import AuthButtons from '@/components/auth/AuthButtons';
+import { useTheme } from '@/components/providers/ThemeProvider';
 
 export default function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isDark, setTheme } = useTheme();
 
   const toggleMobileMenu = () => setMobileMenuOpen(!mobileMenuOpen);
   const closeMobileMenu = () => setMobileMenuOpen(false);
@@ -34,8 +36,24 @@ export default function Navigation() {
             <Link href="/dashboard" className="text-slate-300 hover:text-white transition">
               Dashboard
             </Link>
+            <button
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+              className="p-2 rounded-lg bg-slate-700 hover:bg-slate-600 transition text-slate-300"
+              title="Toggle dark mode"
+            >
+              {isDark ? '☀️' : '🌙'}
+            </button>
             <AuthButtons />
           </div>
+
+          {/* Theme Toggle Button */}
+          <button
+            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            className="md:hidden p-2 rounded hover:bg-slate-700 transition text-slate-300"
+            title="Toggle dark mode"
+          >
+            {isDark ? '☀️' : '🌙'}
+          </button>
 
           {/* Mobile Menu Button */}
           <button
