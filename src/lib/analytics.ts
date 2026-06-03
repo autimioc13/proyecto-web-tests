@@ -4,11 +4,7 @@ export function trackEvent(
   name: string,
   data?: Record<string, string | number | boolean>
 ) {
-  try {
-    track(name, data);
-  } catch (error) {
-    console.error('Analytics track failed:', error);
-  }
+  track(name, data);
 }
 
 export const GameificationEvents = {

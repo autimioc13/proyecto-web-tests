@@ -4,8 +4,14 @@ import { validateAdminSession } from '@/lib/admin-auth';
 import AITestGenerator from '@/components/admin/AITestGenerator';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { Metadata, Viewport } from 'next';
 
-export const metadata = {
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
+
+export const metadata: Metadata = {
   title: 'Generador de Tests - Admin',
 };
 

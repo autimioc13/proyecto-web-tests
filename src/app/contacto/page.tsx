@@ -1,5 +1,10 @@
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { Mail, MapPin, Phone } from 'lucide-react';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: 'Contacto | QuizLab',
