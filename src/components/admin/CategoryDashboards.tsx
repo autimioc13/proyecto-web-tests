@@ -45,13 +45,13 @@ export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
           return (
             <div
               key={cat.silo}
-              className={`bg-gradient-to-br ${categoryColors[cat.color]} p-1 rounded-lg hover:shadow-lg transition-shadow`}
+              className={`bg-gradient-to-br ${categoryColors[cat.color]} p-1 rounded-xl hover:shadow-lg transition-shadow`}
             >
-              <div className="bg-white rounded-lg p-6 h-full">
+              <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-xl p-6 h-full border border-white/20 hover:bg-white/15 dark:hover:bg-white/10 transition-all">
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <p className="text-3xl mb-1">{cat.icon}</p>
-                    <h3 className="text-lg font-bold text-gray-900">{cat.silo}</h3>
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white">{cat.silo}</h3>
                   </div>
                   <span className={`text-2xl font-bold bg-gradient-to-r ${categoryColors[cat.color]} bg-clip-text text-transparent`}>
                     ${avgRevenue}
@@ -60,27 +60,27 @@ export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 text-sm">Completados</span>
-                    <span className="font-bold text-gray-900">{totalCompleted}</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm">Completados</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{totalCompleted}</span>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 text-sm">% Completación</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm">% Completación</span>
                     <div className="flex items-center gap-2">
-                      <div className="w-20 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-20 h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
                         <div
                           className={`h-full bg-gradient-to-r ${categoryColors[cat.color]}`}
                           style={{ width: `${avgCompletion}%` }}
                         />
                       </div>
-                      <span className="font-bold text-gray-900">{avgCompletion}%</span>
+                      <span className="font-bold text-gray-900 dark:text-white">{avgCompletion}%</span>
                     </div>
                   </div>
 
-                  <div className="pt-3 border-t border-gray-200">
-                    <p className="text-gray-600 text-xs mb-1">Top Quiz</p>
-                    <p className="font-bold text-gray-900 mb-1">{topQuiz}</p>
-                    <p className="text-gray-500 text-xs">{topQuizStarts} intentos</p>
+                  <div className="pt-3 border-t border-white/10">
+                    <p className="text-gray-700 dark:text-gray-300 text-xs mb-1">Top Quiz</p>
+                    <p className="font-bold text-gray-900 dark:text-white mb-1">{topQuiz}</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-xs">{topQuizStarts} intentos</p>
                   </div>
                 </div>
               </div>
