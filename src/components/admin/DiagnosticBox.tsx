@@ -36,8 +36,8 @@ export default function DiagnosticBox({ metrics }: DiagnosticBoxProps) {
   }
 
   return (
-    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-      <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-yellow-900">
+    <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl p-6 shadow-lg hover:bg-white/15 dark:hover:bg-white/10 transition-all">
+      <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
         <Lightbulb size={20} />
         Diagnóstico Automático
       </h3>
@@ -53,7 +53,7 @@ export default function DiagnosticBox({ metrics }: DiagnosticBoxProps) {
                   : 'text-blue-600'
               }`}
             />
-            <p className="text-gray-800">{diag.message}</p>
+            <p className="text-gray-700 dark:text-gray-300">{diag.message}</p>
           </div>
         ))}
       </div>
