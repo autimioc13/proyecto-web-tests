@@ -46,7 +46,7 @@ export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
                     <p className="text-3xl mb-1">{cat.icon}</p>
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">{cat.silo}</h3>
                   </div>
-                  <span className={`text-2xl font-bold bg-gradient-to-r ${categoryColors[cat.color]} bg-clip-text text-transparent`}>
+                  <span className="text-2xl font-bold text-gray-900 dark:text-white">
                     ${avgRevenue}
                   </span>
                 </div>
@@ -62,7 +62,7 @@ export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
                     <div className="flex items-center gap-2">
                       <div className="w-20 h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
                         <div
-                          className={`h-full bg-gradient-to-r ${categoryColors[cat.color]}`}
+                          className="h-full bg-white/40 dark:bg-white/30"
                           style={{ width: `${avgCompletion}%` }}
                         />
                       </div>

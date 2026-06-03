@@ -13,9 +13,9 @@ interface TopPerformer {
 
 export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
   const medalColors: Record<number, { medal: string; bg: string }> = {
-    1: { medal: '🥇', bg: 'from-yellow-400 to-yellow-600' },
-    2: { medal: '🥈', bg: 'from-gray-300 to-gray-500' },
-    3: { medal: '🥉', bg: 'from-orange-300 to-orange-500' },
+    1: { medal: '🥇', bg: '' },
+    2: { medal: '🥈', bg: '' },
+    3: { medal: '🥉', bg: '' },
   };
 
   return (
@@ -29,7 +29,7 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
           return (
             <div
               key={perf.rank}
-              className={`bg-gradient-to-r ${medal.bg} p-1 rounded-xl hover:shadow-lg transition-shadow`}
+              className="rounded-xl hover:shadow-lg transition-shadow"
             >
               <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-xl p-5 flex items-center justify-between border border-white/20 hover:bg-white/15 dark:hover:bg-white/10 transition-all">
                 <div className="flex items-center gap-4">
@@ -49,7 +49,7 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
 
                   <div>
                     <p className="text-gray-700 dark:text-gray-300 text-xs">Ingresos</p>
-                    <p className="text-2xl font-bold text-green-600">${perf.revenue || 0}</p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">${perf.revenue || 0}</p>
                   </div>
 
                   <div className="flex gap-1">
@@ -57,7 +57,7 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
                       <Star
                         key={i}
                         size={18}
-                        className={i < (perf.rating || 0) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                        className={i < (perf.rating || 0) ? 'fill-white text-white' : 'text-gray-400'}
                       />
                     ))}
                   </div>
@@ -68,7 +68,7 @@ export function TopPerformers({ performers }: { performers: TopPerformer[] }) {
         })}
       </div>
 
-      <button className="mt-6 w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 rounded-xl hover:shadow-lg transition-shadow">
+      <button className="mt-6 w-full bg-white/20 dark:bg-white/10 text-white font-bold py-3 rounded-xl hover:shadow-lg hover:bg-white/30 dark:hover:bg-white/15 transition-all border border-white/20">
         Ver Top 10 Completo ⭐
       </button>
     </div>

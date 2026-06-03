@@ -19,25 +19,25 @@ export function RevenueChart({ data }: { data: RevenueDataPoint[] }) {
           <div key={point.date} className="border-b border-white/10 pb-4 last:border-0">
             <div className="flex justify-between items-center mb-2">
               <span className="font-medium text-gray-900 dark:text-white">{point.date}</span>
-              <span className="text-2xl font-bold text-purple-600">${point.ingresos}</span>
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">${point.ingresos}</span>
             </div>
 
             <div className="flex gap-4 text-sm">
               <div className="flex-1">
                 <p className="text-gray-700 dark:text-gray-300 mb-1">Usuarios: {point.usuarios}</p>
-                <div className="w-full h-2 bg-blue-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-blue-600"
+                <div className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white/40 dark:bg-white/30"
                     style={{ width: `${(point.usuarios / 100) * 100}%` }}
                   />
                 </div>
               </div>
               
               <div className="flex-1">
-                <p className="text-gray-600 mb-1">Completados: {point.completados}</p>
-                <div className="w-full h-2 bg-green-200 rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-green-600"
+                <p className="text-gray-600 dark:text-gray-400 mb-1">Completados: {point.completados}</p>
+                <div className="w-full h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-white/40 dark:bg-white/30"
                     style={{ width: `${(point.completados / 100) * 100}%` }}
                   />
                 </div>

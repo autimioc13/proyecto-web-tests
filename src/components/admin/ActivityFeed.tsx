@@ -12,11 +12,11 @@ interface Activity {
 
 export function ActivityFeed({ activities }: { activities: Activity[] }) {
   const activityIcons = {
-    completion: <CheckCircle size={18} className="text-green-500" />,
-    share: <Share2 size={18} className="text-blue-500" />,
-    generation: <Bot size={18} className="text-purple-500" />,
-    start: <Zap size={18} className="text-orange-500" />,
-    live: <Zap size={18} className="text-red-500 animate-pulse" />,
+    completion: <CheckCircle size={18} className="text-gray-700 dark:text-gray-300" />,
+    share: <Share2 size={18} className="text-gray-700 dark:text-gray-300" />,
+    generation: <Bot size={18} className="text-gray-700 dark:text-gray-300" />,
+    start: <Zap size={18} className="text-gray-700 dark:text-gray-300" />,
+    live: <Zap size={18} className="text-gray-700 dark:text-gray-300 animate-pulse" />,
   };
 
   return (
@@ -27,9 +27,7 @@ export function ActivityFeed({ activities }: { activities: Activity[] }) {
         {activities.map((activity) => (
           <div
             key={activity.id}
-            className={`flex items-start gap-3 pb-4 mb-4 border-b border-white/10 last:border-0 hover:bg-white/10 dark:hover:bg-white/5 transition-colors p-2 rounded-lg ${
-              activity.type === 'live' ? 'bg-red-500/10 dark:bg-red-500/5' : ''
-            }`}
+            className="flex items-start gap-3 pb-4 mb-4 border-b border-white/10 last:border-0 hover:bg-white/10 dark:hover:bg-white/5 transition-colors p-2 rounded-lg"
           >
             <div className="flex-shrink-0 mt-1">
               {activityIcons[activity.type]}
@@ -45,7 +43,7 @@ export function ActivityFeed({ activities }: { activities: Activity[] }) {
             </div>
 
             {activity.type === 'live' && (
-              <span className="inline-block px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-lg animate-pulse">
+              <span className="inline-block px-2 py-1 bg-white/30 dark:bg-white/20 text-white text-xs font-bold rounded-lg animate-pulse border border-white/40">
                 LIVE
               </span>
             )}

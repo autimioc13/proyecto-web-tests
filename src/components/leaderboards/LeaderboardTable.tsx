@@ -49,14 +49,14 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white/40 dark:border-white/30"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">
+      <div className="bg-white/10 dark:bg-white/5 border border-white/20 rounded-lg p-4 text-gray-900 dark:text-white">
         {error}
       </div>
     );
@@ -105,7 +105,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                   showAnimation ? `animate-slideIn` : ''
                 } ${
                   isTopThree
-                    ? 'bg-gradient-to-r from-amber-500/15 to-transparent hover:from-amber-500/25 dark:from-amber-500/10 dark:hover:from-amber-500/15'
+                    ? 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
                     : 'hover:bg-white/10 dark:hover:bg-white/5'
                 }`}
                 style={
@@ -143,7 +143,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                           className="h-10 w-10 rounded-full object-cover"
                         />
                       ) : (
-                        <div className="h-10 w-10 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                        <div className="h-10 w-10 rounded-full bg-white/20 dark:bg-white/10 flex items-center justify-center text-gray-900 dark:text-white font-bold text-sm border border-white/20">
                           {(entry.username || entry.email || 'P')
                             .charAt(0)
                             .toUpperCase()}
@@ -175,10 +175,10 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
                 {/* XP */}
                 <td className="px-6 py-4 text-right">
-                  <span className="font-semibold text-purple-600 dark:text-purple-400 text-lg">
+                  <span className="font-semibold text-gray-900 dark:text-white text-lg">
                     {formatXP(entry.total_xp)}
                   </span>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">
+                  <div className="text-xs text-gray-600 dark:text-gray-400">
                     {entry.total_xp.toLocaleString()}
                   </div>
                 </td>

@@ -47,20 +47,19 @@ export default function Sidebar() {
       className="
         fixed left-0 top-0 h-screen w-24 z-40
         hidden md:flex flex-col
-        bg-gradient-to-b from-blue-500/10 via-purple-500/5 to-transparent
+        bg-white/10 dark:bg-white/5
         backdrop-blur-xl
-        border-r border-glass
-        shadow-glass-lg
+        border-r border-white/20
+        shadow-lg
       "
     >
       {/* Logo/Brand area */}
-      <div className="h-16 flex items-center justify-center border-b border-glass/50">
+      <div className="h-16 flex items-center justify-center border-b border-white/20">
         <Link
           href="/"
           className="
             text-2xl font-bold
-            bg-gradient-to-r from-purple-400 to-purple-600
-            bg-clip-text text-transparent
+            text-gray-900 dark:text-white
             hover:scale-110 transition-transform duration-300
           "
           title="QuizLab"
@@ -85,8 +84,8 @@ export default function Sidebar() {
                 group
                 ${
                   active
-                    ? 'bg-gradient-to-br from-purple-500/40 to-blue-500/30 backdrop-blur-md shadow-glass-md'
-                    : 'hover:bg-white/10 hover:backdrop-blur-lg'
+                    ? 'bg-white/20 dark:bg-white/10 backdrop-blur-md shadow-lg'
+                    : 'hover:bg-white/10 dark:hover:bg-white/5 hover:backdrop-blur-lg'
                 }
               `}
               title={item.label}
@@ -96,7 +95,7 @@ export default function Sidebar() {
                 <div
                   className="
                     absolute inset-0 rounded-2xl
-                    bg-gradient-to-br from-purple-400/20 to-blue-400/10
+                    bg-white/10
                     blur-lg opacity-0 group-hover:opacity-100
                     transition-opacity duration-300
                     -z-10
@@ -110,8 +109,8 @@ export default function Sidebar() {
                   transition-all duration-300
                   ${
                     active
-                      ? 'text-purple-300 drop-shadow-lg'
-                      : 'text-slate-400 group-hover:text-white'
+                      ? 'text-gray-900 dark:text-white drop-shadow-lg'
+                      : 'text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white'
                   }
                 `}
               />
@@ -120,7 +119,7 @@ export default function Sidebar() {
               <span
                 className="
                   absolute left-full ml-3 px-3 py-1.5 rounded-lg
-                  bg-slate-900/95 backdrop-blur-sm text-white text-xs
+                  bg-gray-900/95 dark:bg-gray-800/95 backdrop-blur-sm text-white text-xs
                   font-medium whitespace-nowrap
                   opacity-0 group-hover:opacity-100
                   pointer-events-none transition-opacity duration-200
@@ -136,7 +135,7 @@ export default function Sidebar() {
 
       {/* Divider */}
       <div className="px-4 mb-4">
-        <div className="h-px bg-gradient-to-r from-transparent via-glass to-transparent" />
+        <div className="h-px bg-white/20" />
       </div>
 
       {/* Toggle Controls */}
@@ -150,8 +149,8 @@ export default function Sidebar() {
             group
             ${
               soundEnabled
-                ? 'bg-white/10 hover:bg-white/15'
-                : 'bg-red-500/20 hover:bg-red-500/30'
+                ? 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
+                : 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
             }
           `}
           title={soundEnabled ? 'Desactivar sonido' : 'Activar sonido'}
@@ -171,12 +170,12 @@ export default function Sidebar() {
           {soundEnabled ? (
             <Volume2
               size={24}
-              className="text-amber-300 group-hover:text-amber-200 transition-colors duration-300 drop-shadow-lg"
+              className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 drop-shadow-lg"
             />
           ) : (
             <VolumeX
               size={24}
-              className="text-red-400 group-hover:text-red-300 transition-colors duration-300 drop-shadow-lg"
+              className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 drop-shadow-lg"
             />
           )}
 
@@ -184,7 +183,7 @@ export default function Sidebar() {
           <span
             className="
               absolute left-full ml-3 px-3 py-1.5 rounded-lg
-              bg-slate-900/95 backdrop-blur-sm text-white text-xs
+              bg-gray-900/95 dark:bg-gray-800/95 backdrop-blur-sm text-white text-xs
               font-medium whitespace-nowrap
               opacity-0 group-hover:opacity-100
               pointer-events-none transition-opacity duration-200
@@ -204,8 +203,8 @@ export default function Sidebar() {
             group
             ${
               isDark
-                ? 'bg-white/10 hover:bg-white/15'
-                : 'bg-yellow-400/20 hover:bg-yellow-400/30'
+                ? 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
+                : 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
             }
           `}
           title={isDark ? 'Tema claro' : 'Tema oscuro'}
@@ -225,12 +224,12 @@ export default function Sidebar() {
           {isDark ? (
             <Sun
               size={24}
-              className="text-yellow-300 group-hover:text-yellow-200 transition-colors duration-300 drop-shadow-lg"
+              className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 drop-shadow-lg"
             />
           ) : (
             <Moon
               size={24}
-              className="text-blue-300 group-hover:text-blue-200 transition-colors duration-300 drop-shadow-lg"
+              className="text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300 drop-shadow-lg"
             />
           )}
 
@@ -238,7 +237,7 @@ export default function Sidebar() {
           <span
             className="
               absolute left-full ml-3 px-3 py-1.5 rounded-lg
-              bg-slate-900/95 backdrop-blur-sm text-white text-xs
+              bg-gray-900/95 dark:bg-gray-800/95 backdrop-blur-sm text-white text-xs
               font-medium whitespace-nowrap
               opacity-0 group-hover:opacity-100
               pointer-events-none transition-opacity duration-200
