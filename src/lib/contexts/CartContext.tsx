@@ -1,10 +1,10 @@
-// src/lib/contexts/CartContext.tsx
-
 'use client';
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '@/types/products';
 import { Cart, CartItem } from '@/types/products';
+import { useAuth } from './AuthContext';
+import { createClient } from '@supabase/supabase-js';
 
 interface CartContextType {
   cart: Cart;
@@ -14,15 +14,16 @@ interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  loading: boolean;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'quizlab-cart';
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
-/**
- * Initialize empty cart
- */
 function createEmptyCart(): Cart {
   return {
     items: [],
@@ -32,51 +33,10 @@ function createEmptyCart(): Cart {
   };
 }
 
-/**
- * Calculate cart totals
- */
 function calculateCartTotals(items: CartItem[]): { totalPrice: number; itemCount: number } {
   const totalPrice = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
   return { totalPrice, itemCount };
-}
-
-/**
- * Serialize cart for localStorage
- */
-function serializeCart(cart: Cart): string {
-  return JSON.stringify({
-    items: cart.items.map((item) => ({
-      product: item.product,
-      quantity: item.quantity,
-      addedAt: item.addedAt.toISOString(),
-    })),
-    totalPrice: cart.totalPrice,
-    itemCount: cart.itemCount,
-    lastUpdated: cart.lastUpdated.toISOString(),
-  });
-}
-
-/**
- * Deserialize cart from localStorage
- */
-function deserializeCart(json: string): Cart {
-  try {
-    const data = JSON.parse(json);
-    return {
-      items: data.items.map((item: any) => ({
-        product: item.product,
-        quantity: item.quantity,
-        addedAt: new Date(item.addedAt),
-      })),
-      totalPrice: data.totalPrice,
-      itemCount: data.itemCount,
-      lastUpdated: new Date(data.lastUpdated),
-    };
-  } catch (error) {
-    console.error('Failed to deserialize cart:', error);
-    return createEmptyCart();
-  }
 }
 
 export function useCart() {
@@ -88,40 +48,113 @@ export function useCart() {
 }
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
   const [cart, setCart] = useState<Cart>(createEmptyCart());
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // Load cart from localStorage on mount
+  // Load cart from database on mount or when user changes
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      setCart(deserializeCart(saved));
-    }
-    setIsHydrated(true);
-  }, []);
+    const loadCart = async () => {
+      try {
+        if (!user) {
+          // Not logged in, use localStorage as fallback
+          const saved = localStorage.getItem('quizlab-cart-guest');
+          if (saved) {
+            const data = JSON.parse(saved);
+            setCart({
+              ...data,
+              items: data.items.map((item: any) => ({
+                ...item,
+                addedAt: new Date(item.addedAt),
+              })),
+              lastUpdated: new Date(data.lastUpdated),
+            });
+          }
+          setLoading(false);
+          return;
+        }
 
-  // Persist cart to localStorage whenever it changes
-  useEffect(() => {
-    if (isHydrated) {
-      localStorage.setItem(STORAGE_KEY, serializeCart(cart));
+        // Logged in, load from database
+        const { data, error } = await supabase
+          .from('carts')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') throw error; // PGRST116 = not found
+
+        if (data) {
+          const items = (data.items as any[]).map((item) => ({
+            ...item,
+            addedAt: new Date(item.addedAt),
+          }));
+          const { totalPrice, itemCount } = calculateCartTotals(items);
+          setCart({
+            items,
+            totalPrice,
+            itemCount,
+            lastUpdated: new Date(data.updated_at),
+          });
+        } else {
+          setCart(createEmptyCart());
+        }
+      } catch (err) {
+        console.error('Failed to load cart:', err);
+        setCart(createEmptyCart());
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCart();
+  }, [user]);
+
+  // Save cart to database or localStorage
+  const saveCart = async (newCart: Cart) => {
+    try {
+      if (!user) {
+        // Guest user, save to localStorage
+        localStorage.setItem('quizlab-cart-guest', JSON.stringify({
+          items: newCart.items,
+          totalPrice: newCart.totalPrice,
+          itemCount: newCart.itemCount,
+          lastUpdated: newCart.lastUpdated.toISOString(),
+        }));
+        return;
+      }
+
+      // Logged in user, save to database
+      const cartData = {
+        user_id: user.id,
+        items: newCart.items.map(item => ({
+          product: item.product,
+          quantity: item.quantity,
+          addedAt: item.addedAt.toISOString(),
+        })),
+        total_price: newCart.totalPrice,
+        item_count: newCart.itemCount,
+      };
+
+      await supabase
+        .from('carts')
+        .upsert(cartData, { onConflict: 'user_id' });
+    } catch (err) {
+      console.error('Failed to save cart:', err);
     }
-  }, [cart, isHydrated]);
+  };
 
   const addToCart = (product: Product, quantity: number = 1) => {
     setCart((prevCart) => {
-      // Check if product already in cart
       const existingItem = prevCart.items.find((item) => item.product.id === product.id);
 
       let newItems: CartItem[];
       if (existingItem) {
-        // Update quantity
         newItems = prevCart.items.map((item) =>
           item.product.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
-        // Add new item
         newItems = [
           ...prevCart.items,
           {
@@ -133,12 +166,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       }
 
       const { totalPrice, itemCount } = calculateCartTotals(newItems);
-      return {
+      const newCart = {
         items: newItems,
         totalPrice,
         itemCount,
         lastUpdated: new Date(),
       };
+
+      saveCart(newCart);
+      return newCart;
     });
   };
 
@@ -146,20 +182,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     setCart((prevCart) => {
       const newItems = prevCart.items.filter((item) => item.product.id !== productId);
       const { totalPrice, itemCount } = calculateCartTotals(newItems);
-      return {
+      const newCart = {
         items: newItems,
         totalPrice,
         itemCount,
         lastUpdated: new Date(),
       };
+
+      saveCart(newCart);
+      return newCart;
     });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
     setCart((prevCart) => {
-      if (quantity <= 0) {
-        return prevCart;
-      }
+      if (quantity <= 0) return prevCart;
 
       const newItems = prevCart.items.map((item) =>
         item.product.id === productId
@@ -168,17 +205,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
 
       const { totalPrice, itemCount } = calculateCartTotals(newItems);
-      return {
+      const newCart = {
         items: newItems,
         totalPrice,
         itemCount,
         lastUpdated: new Date(),
       };
+
+      saveCart(newCart);
+      return newCart;
     });
   };
 
   const clearCart = () => {
-    setCart(createEmptyCart());
+    const newCart = createEmptyCart();
+    saveCart(newCart);
+    setCart(newCart);
   };
 
   const getTotalItems = () => cart.itemCount;
@@ -194,6 +236,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         getTotalItems,
         getTotalPrice,
+        loading,
       }}
     >
       {children}
