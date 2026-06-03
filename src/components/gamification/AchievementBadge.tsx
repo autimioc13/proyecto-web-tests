@@ -35,12 +35,12 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
     <div className="relative inline-flex items-center justify-center">
       {/* Badge Container */}
       <div
-        className={`relative w-16 h-16 rounded-full flex items-center justify-center cursor-help transition-all duration-300 ${
+        className={`relative w-16 h-16 rounded-full flex items-center justify-center cursor-help transition-all duration-300 backdrop-blur-sm border-2 ${
           unlocked
-            ? `bg-gradient-to-br ${bgGradient} shadow-lg hover:shadow-xl ${
+            ? `bg-gradient-to-br ${bgGradient} shadow-lg hover:shadow-xl hover:shadow-white/30 border-white/40 ${
                 showAnimation ? 'animate-bounce' : ''
               }`
-            : 'bg-gradient-to-br from-gray-300 to-gray-400 opacity-50 grayscale'
+            : 'bg-gradient-to-br from-gray-300 to-gray-400 opacity-50 grayscale border-gray-400/40'
         }`}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
@@ -65,10 +65,10 @@ export const AchievementBadge: React.FC<AchievementBadgeProps> = ({
       {/* Tooltip */}
       {showTooltip && (
         <div
-          className={`absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-3 py-2 rounded-lg text-sm z-50 whitespace-nowrap shadow-lg border ${
+          className={`absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 bg-gray-900/90 backdrop-blur-lg text-white px-3 py-2 rounded-lg text-sm z-50 whitespace-nowrap shadow-lg border ${
             unlocked
               ? `border-[${rarityColor}]`
-              : 'border-gray-700'
+              : 'border-gray-700/60'
           }`}
           style={unlocked ? { borderColor: rarityColor } : {}}
         >
