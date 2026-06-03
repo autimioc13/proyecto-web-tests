@@ -14,11 +14,11 @@ export default function TestCard({ category }: TestCardProps) {
   return (
     <Link href={`/tests?category=${category.id}`}>
       <div
-        className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer h-full`}
+        className={`group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition-all duration-300 cursor-pointer h-full backdrop-blur-xl border border-white/20 bg-white/10 dark:bg-white/5`}
       >
         {/* Gradient Background */}
         <div
-          className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-90 group-hover:opacity-100 transition-opacity`}
+          className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-80 group-hover:opacity-90 transition-opacity`}
         />
 
         {/* Content */}
@@ -35,7 +35,7 @@ export default function TestCard({ category }: TestCardProps) {
 
           {/* Description */}
           <div>
-            <p className="text-white text-sm mb-6 opacity-90 group-hover:opacity-100 transition-opacity">
+            <p className="text-white/90 text-sm mb-6 group-hover:text-white/100 transition-opacity">
               {category.description}
             </p>
 
@@ -44,7 +44,7 @@ export default function TestCard({ category }: TestCardProps) {
               <span className="text-xs font-semibold uppercase tracking-wider opacity-80">
                 Tests Disponibles
               </span>
-              <span className="inline-block bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold group-hover:bg-opacity-30 transition-all">
+              <span className="inline-block bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold group-hover:bg-white/30 transition-all border border-white/20">
                 {category.testCount}+
               </span>
             </div>
@@ -69,7 +69,7 @@ export default function TestCard({ category }: TestCardProps) {
         </div>
 
         {/* Shine Effect on Hover */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity bg-white" />
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity bg-white" />
       </div>
     </Link>
   );
