@@ -10,7 +10,8 @@
     "csv": "node scripts/csv-to-quiz.js",
     "import": "node scripts/import-quizzes.js",
     "validate": "node scripts/validate.js",
-    "generate": "node scripts/generate-quizzes.js"
+    "generate": "node scripts/generate-quizzes.js",
+    "verify-migrations": "node scripts/verify-migrations.js"
   },
   "dependencies": {
     "@prisma/client": "^5.14.0",
