@@ -45,7 +45,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <Link href="/personalidad" className="btn-primary bg-white text-purple-600 hover:bg-gray-100 inline-block">
+          <Link href="/personalidad" className="inline-block px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl">
             Comenzar Ahora →
           </Link>
         </div>
@@ -88,7 +88,7 @@ export default async function Home() {
                 ⏱️ {trendingQuizzes[0].timeMinutes} minutos • {trendingQuizzes[0].questions.length}{' '}
                 preguntas
               </p>
-              <Link href={`/quiz/${trendingQuizzes[0].slug}`} className="btn-primary w-fit">
+              <Link href={`/quiz/${trendingQuizzes[0].slug}`} className="inline-block px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
                 Empezar Test →
               </Link>
             </div>

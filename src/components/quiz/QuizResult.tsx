@@ -137,11 +137,11 @@ export default function QuizResult({
       </div>
 
       {/* Restart Button */}
-      <div className="flex gap-4 justify-center">
-        <button onClick={onRestart} className="btn-secondary">
+      <div className="flex gap-4 justify-center flex-wrap">
+        <button onClick={onRestart} className="px-6 py-3 bg-gray-200 text-gray-900 font-semibold rounded-lg hover:bg-gray-300 transition-colors shadow-md hover:shadow-lg">
           Repetir Test
         </button>
-        <Link href="/" className="btn-primary bg-blue-600 text-white">
+        <Link href="/" className="inline-block px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
           Volver al Inicio
         </Link>
       </div>

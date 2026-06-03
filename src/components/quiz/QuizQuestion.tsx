@@ -70,7 +70,7 @@ export default function QuizQuestion({
         <button
           onClick={onNext}
           disabled={!selectedOption}
-          className="btn-primary bg-blue-600 text-white w-full mt-8 flex items-center justify-center gap-2 disabled:opacity-50"
+          className="px-6 py-3 bg-blue-600 text-white font-semibold w-full mt-8 flex items-center justify-center gap-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
         >
           {currentQuestionIndex === totalQuestions - 1 ? 'Ver Resultado' : 'Siguiente'}
           <ChevronRight size={20} />
