@@ -6,7 +6,7 @@ import Navigation from '@/components/nav/Navigation';
 import Sidebar from '@/components/nav/Sidebar';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
-import AnimatedGradient from '@/components/backgrounds/AnimatedGradient';
+// Removed AnimatedGradient - using static background for glassmorphism effect
 import { SoundProvider } from '@/components/providers/SoundProvider';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import './globals.css';
@@ -76,16 +76,14 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="text-gray-900 antialiased">
+      <body className="text-gray-900 dark:text-white antialiased bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
         <ThemeProvider>
           <SoundProvider>
-            <AnimatedGradient>
-              <Navigation />
-              <Sidebar />
-              <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
-              <Footer />
-              <CookieConsentBanner />
-            </AnimatedGradient>
+            <Navigation />
+            <Sidebar />
+            <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
+            <Footer />
+            <CookieConsentBanner />
           </SoundProvider>
         </ThemeProvider>
         <Analytics />

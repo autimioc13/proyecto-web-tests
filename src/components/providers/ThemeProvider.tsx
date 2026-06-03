@@ -22,13 +22,21 @@ export function useTheme() {
 function applyTheme(theme: Theme, systemTheme: 'light' | 'dark') {
   const isDark = theme === 'dark' || (theme === 'system' && systemTheme === 'dark');
 
+  // Force apply dark class
+  const html = document.documentElement;
   if (isDark) {
-    document.documentElement.classList.add('dark');
+    html.classList.add('dark');
+    html.style.colorScheme = 'dark';
   } else {
-    document.documentElement.classList.remove('dark');
+    html.classList.remove('dark');
+    html.style.colorScheme = 'light';
   }
 
+  // Save preference
   localStorage.setItem('theme', theme);
+
+  // Debug
+  console.log('Theme applied:', { theme, isDark, hasDarkClass: html.classList.contains('dark') });
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
