@@ -72,22 +72,23 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
   return (
     <div className="overflow-x-auto">
+      <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl overflow-hidden">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-gray-200 bg-gray-50">
-            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 w-16">
+          <tr className="border-b border-white/20 bg-white/20 dark:bg-white/10 backdrop-blur-sm">
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300 w-16">
               Rank
             </th>
-            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+            <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-gray-300">
               Player
             </th>
-            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 w-28">
+            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300 w-28">
               Level
             </th>
-            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 w-32">
+            <th className="px-6 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300 w-32">
               XP
             </th>
-            <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700 w-24">
+            <th className="px-6 py-4 text-center text-sm font-semibold text-gray-700 dark:text-gray-300 w-24">
               Badges
             </th>
           </tr>
@@ -100,12 +101,12 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
             return (
               <tr
                 key={`${entry.user_id}-${entry.rank}`}
-                className={`border-b border-gray-100 transition-all duration-300 ${
+                className={`border-b border-white/10 transition-all duration-300 ${
                   showAnimation ? `animate-slideIn` : ''
                 } ${
                   isTopThree
-                    ? 'bg-gradient-to-r from-amber-50/50 to-transparent hover:from-amber-100/50'
-                    : 'hover:bg-gray-50'
+                    ? 'bg-gradient-to-r from-amber-500/15 to-transparent hover:from-amber-500/25 dark:from-amber-500/10 dark:hover:from-amber-500/15'
+                    : 'hover:bg-white/10 dark:hover:bg-white/5'
                 }`}
                 style={
                   showAnimation
@@ -121,7 +122,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                     {isTopThree ? (
                       <span className="text-2xl">{medalEmoji}</span>
                     ) : (
-                      <span className="text-lg font-bold text-gray-600 w-8 text-center">
+                      <span className="text-lg font-bold text-gray-600 dark:text-gray-400 w-8 text-center">
                         #{entry.rank}
                       </span>
                     )}
@@ -152,11 +153,11 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
                     {/* Player Name */}
                     <div>
-                      <div className="font-medium text-gray-900">
+                      <div className="font-medium text-gray-900 dark:text-white">
                         {entry.username || entry.email?.split('@')[0] || 'Anonymous'}
                       </div>
                       {entry.email && !entry.username && (
-                        <div className="text-xs text-gray-500">{entry.email}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">{entry.email}</div>
                       )}
                     </div>
                   </div>
@@ -166,7 +167,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-2">
                     <span className="text-2xl">⭐</span>
-                    <span className="font-bold text-lg text-gray-900">
+                    <span className="font-bold text-lg text-gray-900 dark:text-white">
                       {entry.level}
                     </span>
                   </div>
@@ -174,10 +175,10 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
 
                 {/* XP */}
                 <td className="px-6 py-4 text-right">
-                  <span className="font-semibold text-purple-600 text-lg">
+                  <span className="font-semibold text-purple-600 dark:text-purple-400 text-lg">
                     {formatXP(entry.total_xp)}
                   </span>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
                     {entry.total_xp.toLocaleString()}
                   </div>
                 </td>
@@ -186,7 +187,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
                 <td className="px-6 py-4 text-center">
                   <div className="flex items-center justify-center gap-1">
                     <span className="text-xl">🏆</span>
-                    <span className="font-semibold text-gray-900">
+                    <span className="font-semibold text-gray-900 dark:text-white">
                       {entry.badges_count}
                     </span>
                   </div>
@@ -196,6 +197,7 @@ export const LeaderboardTable: React.FC<LeaderboardTableProps> = ({
           })}
         </tbody>
       </table>
+      </div>
 
       <style>{`
         @keyframes slideIn {
