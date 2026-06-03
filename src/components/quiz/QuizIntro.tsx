@@ -33,7 +33,7 @@ export default function QuizIntro({ quiz, onStart }: QuizIntroProps) {
 
       <button
         onClick={onStart}
-        className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold text-lg rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all w-full sm:w-auto border border-white/20 backdrop-blur-sm"
+        className="px-8 py-3 bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white font-semibold text-lg rounded-lg hover:bg-white/30 dark:hover:bg-white/15 hover:shadow-lg transition-all w-full sm:w-auto border border-white/20 backdrop-blur-sm"
       >
         ¡Comenzar Ahora! 🚀
       </button>

@@ -25,9 +25,9 @@ export default function PrimaryButton({
   const baseStyles = 'rounded-lg transition-all duration-200 flex items-center justify-center gap-2 font-semibold backdrop-blur-sm';
 
   const variants = {
-    gradient: 'bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:shadow-xl hover:shadow-purple-500/50 hover:scale-105 disabled:opacity-50 border border-white/20',
-    solid: 'bg-purple-600/80 backdrop-blur-md text-white hover:bg-purple-700 hover:shadow-lg disabled:opacity-50 border border-white/20',
-    outline: 'border-2 border-purple-600/50 text-purple-600 dark:text-purple-400 hover:bg-purple-600/10 dark:hover:bg-purple-600/20 disabled:opacity-50 backdrop-blur-md',
+    gradient: 'bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white hover:shadow-xl hover:shadow-gray-400/30 dark:hover:shadow-gray-500/30 hover:scale-105 disabled:opacity-50 border border-white/20 hover:bg-white/30 dark:hover:bg-white/15',
+    solid: 'bg-white/15 dark:bg-white/10 backdrop-blur-md text-gray-900 dark:text-white hover:bg-white/25 dark:hover:bg-white/15 hover:shadow-lg disabled:opacity-50 border border-white/20',
+    outline: 'border-2 border-gray-400 dark:border-gray-500 text-gray-900 dark:text-white hover:bg-white/10 dark:hover:bg-white/15 disabled:opacity-50 backdrop-blur-md',
   };
 
   const sizes = {

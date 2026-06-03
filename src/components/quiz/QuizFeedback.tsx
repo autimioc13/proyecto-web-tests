@@ -79,15 +79,15 @@ export default function QuizFeedback({
       <div className="flex flex-col items-center gap-4">
         {isCorrect ? (
           <>
-            <CheckCircle size={64} className="text-green-500 drop-shadow-lg" />
-            <div className="bg-green-500/80 backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-green-400/50">
+            <CheckCircle size={64} className="text-gray-700 dark:text-gray-300 drop-shadow-lg" />
+            <div className="bg-white/30 dark:bg-white/20 backdrop-blur-lg text-gray-900 dark:text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-white/40">
               {message || '¡Correcto!'}
             </div>
           </>
         ) : (
           <>
-            <XCircle size={64} className="text-red-500 drop-shadow-lg" />
-            <div className="bg-red-500/80 backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-red-400/50">
+            <XCircle size={64} className="text-gray-700 dark:text-gray-300 drop-shadow-lg" />
+            <div className="bg-white/30 dark:bg-white/20 backdrop-blur-lg text-gray-900 dark:text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-white/40">
               {message || 'Incorrecto'}
             </div>
           </>

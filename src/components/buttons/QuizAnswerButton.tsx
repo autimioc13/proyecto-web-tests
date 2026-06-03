@@ -25,18 +25,18 @@ export default function QuizAnswerButton({
 
   if (answered) {
     if (correct) {
-      borderColor = 'border-green-500/50';
-      bgColor = 'bg-green-500/20 dark:bg-green-500/10';
-      textColor = 'text-green-900 dark:text-green-100';
+      borderColor = 'border-gray-500/50 dark:border-gray-400/50';
+      bgColor = 'bg-white/20 dark:bg-white/10';
+      textColor = 'text-gray-900 dark:text-white';
     } else {
-      borderColor = 'border-red-500/50';
-      bgColor = 'bg-red-500/20 dark:bg-red-500/10';
-      textColor = 'text-red-900 dark:text-red-100';
+      borderColor = 'border-gray-400/50 dark:border-gray-500/50';
+      bgColor = 'bg-white/15 dark:bg-white/10';
+      textColor = 'text-gray-900 dark:text-white';
     }
   } else if (selected) {
-    borderColor = 'border-purple-500/60';
-    bgColor = 'bg-purple-500/20 dark:bg-purple-500/10 shadow-lg shadow-purple-500/20';
-    textColor = 'text-purple-900 dark:text-purple-100';
+    borderColor = 'border-gray-500/60 dark:border-gray-400/60';
+    bgColor = 'bg-white/20 dark:bg-white/10 shadow-lg shadow-gray-400/20 dark:shadow-gray-500/20';
+    textColor = 'text-gray-900 dark:text-white';
   }
 
   return (
@@ -45,7 +45,7 @@ export default function QuizAnswerButton({
       {...props}
     >
       <div className="flex items-center gap-4">
-        <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 text-white font-bold">
+        <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white font-bold border border-white/20">
           {letter}
         </div>
         <span className="flex-1">{children}</span>

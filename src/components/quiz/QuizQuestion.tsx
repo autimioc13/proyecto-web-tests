@@ -43,7 +43,7 @@ export default function QuizQuestion({
 
       <div className="w-full bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-full h-2">
         <div
-          className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+          className="bg-gray-400 dark:bg-gray-300 h-2 rounded-full transition-all duration-300"
           style={{ width: `${progressPercent}%` }}
         />
       </div>
@@ -58,7 +58,7 @@ export default function QuizQuestion({
               onClick={() => onSelectOption(option.id)}
               className={`w-full p-4 text-left rounded-lg border-2 font-semibold transition-all duration-200 backdrop-blur-sm ${
                 selectedOption === option.id
-                  ? 'border-blue-500 bg-blue-500/20 text-blue-900 dark:text-blue-100 shadow-lg shadow-blue-500/20'
+                  ? 'border-gray-400 dark:border-gray-500 bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white shadow-lg shadow-gray-400/20 dark:shadow-gray-500/20'
                   : 'border-white/20 bg-white/5 dark:bg-white/5 text-gray-900 dark:text-white hover:border-white/40 hover:bg-white/10'
               }`}
             >
@@ -70,7 +70,7 @@ export default function QuizQuestion({
         <button
           onClick={onNext}
           disabled={!selectedOption}
-          className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold w-full mt-8 flex items-center justify-center gap-2 rounded-lg hover:shadow-lg hover:shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none backdrop-blur-sm border border-white/20"
+          className="px-6 py-3 bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white font-semibold w-full mt-8 flex items-center justify-center gap-2 rounded-lg hover:bg-white/30 dark:hover:bg-white/15 hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none backdrop-blur-sm border border-white/20"
         >
           {currentQuestionIndex === totalQuestions - 1 ? 'Ver Resultado' : 'Siguiente'}
           <ChevronRight size={20} />
