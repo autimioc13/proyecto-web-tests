@@ -16,8 +16,9 @@ export default async function Home() {
   return (
     <div className="space-y-16 py-12">
       {/* HERO SECTION */}
-      <section className="bg-gradient-to-r from-slate-900 via-purple-800 to-slate-900 text-white py-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
+      <section className="bg-gradient-to-r from-slate-900 via-purple-800 to-slate-900 text-white py-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-sm" />
+        <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
             Tests que revelan quién eres realmente
           </h1>
@@ -27,25 +28,25 @@ export default async function Home() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-12">
-            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/30">
               <div className="text-3xl font-bold text-purple-300">250+</div>
               <div className="text-sm text-purple-200 mt-2">Tests Disponibles</div>
             </div>
-            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/30">
               <div className="text-3xl font-bold text-purple-300">1M+</div>
               <div className="text-sm text-purple-200 mt-2">Usuarios Activos</div>
             </div>
-            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/30">
               <div className="text-3xl font-bold text-purple-300">98%</div>
               <div className="text-sm text-purple-200 mt-2">Satisfacción</div>
             </div>
-            <div className="bg-white bg-opacity-10 backdrop-blur rounded-lg p-6 border border-white border-opacity-20">
+            <div className="bg-white/10 backdrop-blur-lg rounded-lg p-6 border border-white/30">
               <div className="text-3xl font-bold text-purple-300">100%</div>
               <div className="text-sm text-purple-200 mt-2">Precisión Científica</div>
             </div>
           </div>
 
-          <Link href="/personalidad" className="inline-block px-8 py-3 bg-white text-purple-600 font-semibold rounded-lg hover:bg-gray-100 transition-colors shadow-lg hover:shadow-xl">
+          <Link href="/personalidad" className="inline-block px-8 py-3 bg-white/20 text-white font-semibold rounded-lg hover:bg-white/30 transition-all shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/30">
             Comenzar Ahora →
           </Link>
         </div>
@@ -103,11 +104,11 @@ export default async function Home() {
 
       {/* SILOS GRID */}
       <section className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8">Explora por Categoría</h2>
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Explora por Categoría</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {silos.map((silo) => (
             <Link key={silo.slug} href={`/${silo.slug}`}>
-              <div className={`bg-gradient-to-br ${silo.color} text-white p-8 rounded-lg shadow-lg hover:shadow-xl transition cursor-pointer h-full flex flex-col justify-center`}>
+              <div className={`bg-gradient-to-br ${silo.color} text-white p-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition cursor-pointer h-full flex flex-col justify-center backdrop-blur-sm border border-white/20`}>
                 <div className="text-5xl mb-4">{silo.emoji}</div>
                 <h3 className="text-2xl font-bold mb-2">{silo.label}</h3>
                 <p className="text-sm opacity-90 mb-4">{silo.description}</p>
