@@ -10,6 +10,7 @@ import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 import { SoundProvider } from '@/components/providers/SoundProvider';
 import ThemeProvider from '@/components/providers/ThemeProvider';
 import { CartProvider } from '@/lib/contexts/CartContext';
+import { AuthProvider } from '@/lib/contexts/AuthContext';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -78,16 +79,18 @@ export default function RootLayout({
         />
       </head>
       <body className="text-gray-900 dark:text-white antialiased bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <CartProvider>
-          <ThemeProvider>
-            <SoundProvider>
-              <SidebarWrapper />
-              <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
-              <Footer />
-              <CookieConsentBanner />
-            </SoundProvider>
-          </ThemeProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <ThemeProvider>
+              <SoundProvider>
+                <SidebarWrapper />
+                <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
+                <Footer />
+                <CookieConsentBanner />
+              </SoundProvider>
+            </ThemeProvider>
+          </CartProvider>
+        </AuthProvider>
         <Analytics />
         <SpeedInsights />
       </body>
