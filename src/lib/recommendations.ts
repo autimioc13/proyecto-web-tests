@@ -1,215 +1,266 @@
-import { createClient } from '@supabase/supabase-js';
-import { Quiz, SiloSlug } from '@/types';
+// src/lib/recommendations.ts
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { Product, ProductRecommendation, RecommendationCondition } from '@/types/products';
+import { PRODUCTS } from './products';
 
-interface QuizWithStats extends Quiz {
-  completedByUser?: boolean;
-  completionCount?: number;
-  avgScore?: number;
-  trendingScore?: number;
+/**
+ * Recommendation configuration
+ * Maps products to conditions that trigger their recommendation
+ */
+export const RECOMMENDATION_CONFIG: ProductRecommendation[] = [
+  // Logic course - high logic scores
+  {
+    productId: 'logic-advanced-course',
+    conditions: [
+      {
+        testSilo: 'lógica',
+        minScore: 80,
+      },
+    ],
+    reason: 'You excelled in logic! Master advanced techniques with our course.',
+    priority: 10,
+  },
+
+  // Intelligence course - moderate intelligence scores
+  {
+    productId: 'intelligence-fundamentals-course',
+    conditions: [
+      {
+        testSilo: 'inteligencia',
+        minScore: 70,
+        maxScore: 85,
+      },
+    ],
+    reason: 'Build on your intelligence foundations with structured training.',
+    priority: 9,
+  },
+
+  // Personality report - personality test takers
+  {
+    productId: 'personality-deep-dive',
+    conditions: [
+      {
+        testSilo: 'personalidad',
+        minScore: 60,
+      },
+    ],
+    reason: 'Discover deeper insights about your personality type.',
+    priority: 8,
+  },
+
+  // Productivity course - general high performers
+  {
+    productId: 'productivity-mastery',
+    conditions: [
+      {
+        testSilo: 'productividad',
+        minScore: 70,
+      },
+    ],
+    reason: 'Optimize your productivity with proven systems.',
+    priority: 8,
+  },
+
+  // Premium certificate - high achievers
+  {
+    productId: 'premium-certificate',
+    conditions: [
+      {
+        minScore: 90,
+      },
+    ],
+    reason: 'Celebrate your exceptional score with a premium certificate.',
+    priority: 7,
+  },
+
+  // Basic certificate - passing students
+  {
+    productId: 'basic-certificate',
+    conditions: [
+      {
+        minScore: 60,
+      },
+    ],
+    reason: 'Get an official certificate for your achievement.',
+    priority: 6,
+  },
+
+  // Master bundle - very high performers
+  {
+    productId: 'knowledge-master-bundle',
+    conditions: [
+      {
+        minScore: 85,
+        minCompletedTests: 5,
+      },
+    ],
+    reason: 'You\'re a serious learner. Get everything at a discount.',
+    priority: 9,
+  },
+
+  // Serious learner bundle - high performers
+  {
+    productId: 'serious-learner-bundle',
+    conditions: [
+      {
+        minScore: 75,
+        minCompletedTests: 3,
+      },
+    ],
+    reason: 'Accelerate your growth with curated courses.',
+    priority: 8,
+  },
+];
+
+/**
+ * User context needed for recommendations
+ */
+export interface UserContext {
+  userId?: string;
+  totalCompletedTests: number;
+  totalXP: number;
+  purchasedProductIds: string[];
+  previousRecommendationIds: string[];
 }
 
 /**
- * Get recommended quizzes based on user's history and category
- * Uses: completed quizzes, category preferences, trending quizzes
+ * Match a single condition against test/user data
  */
-export async function getRecommendedQuizzes(
-  userId: string,
-  category?: SiloSlug,
-  limit: number = 6
-): Promise<QuizWithStats[]> {
-  try {
-    // Get user's completion history
-    const { data: userCompletions } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug')
-      .eq('user_id', userId);
-
-    const completedSlugs = new Set(userCompletions?.map((c) => c.quiz_slug) || []);
-
-    // Get all quizzes from data (in a real app, this would be from database)
-    // For now, we'll implement the logic that can work with imported quiz data
-    let allQuizzes: QuizWithStats[] = [];
-
-    // Get trending quizzes (most completed in last 7 days)
-    const { data: trendingData } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug')
-      .gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
-
-    const trendingQuizzes = new Map<string, number>();
-    trendingData?.forEach((item) => {
-      trendingQuizzes.set(
-        item.quiz_slug,
-        (trendingQuizzes.get(item.quiz_slug) || 0) + 1
-      );
-    });
-
-    // Get average scores for quizzes
-    const { data: scoreData } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug, score, total_questions');
-
-    const quizScores = new Map<
-      string,
-      { totalScore: number; count: number; scores: number[] }
-    >();
-    scoreData?.forEach((item) => {
-      const percentage = (item.score / item.total_questions) * 100;
-      const current = quizScores.get(item.quiz_slug) || {
-        totalScore: 0,
-        count: 0,
-        scores: [],
-      };
-      current.totalScore += percentage;
-      current.count += 1;
-      current.scores.push(percentage);
-      quizScores.set(item.quiz_slug, current);
-    });
-
-    // This would be called with actual quiz data
-    // For now, return structure for implementation
-    const recommended: QuizWithStats[] = [];
-
-    // Filter by category if provided
-    // Filter out already completed quizzes
-    // Sort by: trending score + avg user performance + category preference
-    const filtered = allQuizzes
-      .filter((quiz) => !completedSlugs.has(quiz.slug))
-      .filter((quiz) => !category || quiz.silo === category)
-      .map((quiz) => {
-        const trendScore = trendingQuizzes.get(quiz.slug) || 0;
-        const scores = quizScores.get(quiz.slug);
-        const avgScore = scores ? scores.totalScore / scores.count : 0;
-
-        return {
-          ...quiz,
-          completedByUser: false,
-          completionCount: trendScore,
-          avgScore,
-          trendingScore: trendScore * (avgScore / 100),
-        };
-      })
-      .sort((a, b) => (b.trendingScore || 0) - (a.trendingScore || 0))
-      .slice(0, limit);
-
-    return filtered;
-  } catch (error) {
-    console.error('Error getting recommendations:', error);
-    return [];
+function matchesCondition(
+  condition: RecommendationCondition,
+  testScore: number,
+  testSilo: string,
+  userContext: UserContext
+): boolean {
+  // Score range check
+  if (condition.minScore !== undefined && testScore < condition.minScore) {
+    return false;
   }
+
+  if (condition.maxScore !== undefined && testScore > condition.maxScore) {
+    return false;
+  }
+
+  // Silo check (if specified)
+  if (condition.testSilo && condition.testSilo !== testSilo) {
+    return false;
+  }
+
+  // Completed tests check
+  if (condition.minCompletedTests && userContext.totalCompletedTests < condition.minCompletedTests) {
+    return false;
+  }
+
+  // XP level check
+  if (condition.minXPLevel && userContext.totalXP < condition.minXPLevel) {
+    return false;
+  }
+
+  return true;
 }
 
 /**
- * Get similar quizzes based on a given quiz
+ * Match a recommendation against test/user data
  */
-export async function getSimilarQuizzes(
-  quizSlug: string,
-  userId?: string,
-  limit: number = 4
-): Promise<QuizWithStats[]> {
-  try {
-    // Get the reference quiz's category/silo
-    // (In real implementation, fetch from database)
-    const referenceQuiz = null; // Placeholder - would fetch actual quiz
+function matchesRecommendation(
+  recommendation: ProductRecommendation,
+  testScore: number,
+  testSilo: string,
+  userContext: UserContext
+): boolean {
+  // At least one condition must match
+  return recommendation.conditions.some((condition) =>
+    matchesCondition(condition, testScore, testSilo, userContext)
+  );
+}
 
-    if (!referenceQuiz) return [];
+/**
+ * Get personalized product recommendations
+ * Returns 2-3 products matched to user's test performance
+ */
+export function getRecommendations(
+  testScore: number,
+  testSilo: string,
+  userContext: UserContext,
+  maxRecommendations: number = 3
+): Array<Product & { reason: string; priority: number }> {
+  // Filter config for matching recommendations
+  const matching = RECOMMENDATION_CONFIG.filter((rec) =>
+    matchesRecommendation(rec, testScore, testSilo, userContext)
+  );
 
-    // Get user's completed quizzes if userId provided
-    let completedSlugs = new Set<string>();
-    if (userId) {
-      const { data: completions } = await supabase
-        .from('quiz_completions')
-        .select('quiz_slug')
-        .eq('user_id', userId);
-      completedSlugs = new Set(completions?.map((c) => c.quiz_slug) || []);
+  // Filter out already purchased products
+  const available = matching.filter(
+    (rec) => !userContext.purchasedProductIds.includes(rec.productId)
+  );
+
+  // Sort by priority (higher first)
+  const sorted = available.sort((a, b) => b.priority - a.priority);
+
+  // Take top N and hydrate with product data
+  return sorted.slice(0, maxRecommendations).map((rec) => {
+    const product = PRODUCTS[rec.productId];
+    if (!product) {
+      throw new Error(`Product not found: ${rec.productId}`);
     }
-
-    // Return similar quizzes from same silo, excluding completed ones
-    const similar: QuizWithStats[] = [];
-
-    return similar.slice(0, limit);
-  } catch (error) {
-    console.error('Error getting similar quizzes:', error);
-    return [];
-  }
+    return {
+      ...product,
+      reason: rec.reason,
+      priority: rec.priority,
+    };
+  });
 }
 
 /**
- * Get personalized recommendations based on user activity and preferences
+ * Get fallback recommendations (bestsellers)
+ * Used when no personalized match found
  */
-export async function getPersonalizedRecommendations(
-  userId: string,
-  limit: number = 8
-): Promise<QuizWithStats[]> {
-  try {
-    // Get user's most completed silo
-    const { data: completionsByCategory } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug')
-      .eq('user_id', userId);
+export function getFallbackRecommendations(
+  userContext: UserContext,
+  maxRecommendations: number = 3
+): Array<Product & { reason: string; priority: number }> {
+  // Bestseller IDs (hardcoded order)
+  const bestsellers = [
+    'personality-deep-dive',
+    'premium-certificate',
+    'serious-learner-bundle',
+  ];
 
-    // Analyze category preferences
-    // (Would need quiz data to map slug to category)
-
-    // Get trending quizzes
-    const { data: recentTrending } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug')
-      .gte('created_at', new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString())
-      .limit(100);
-
-    const trendingCounts = new Map<string, number>();
-    recentTrending?.forEach((item) => {
-      trendingCounts.set(
-        item.quiz_slug,
-        (trendingCounts.get(item.quiz_slug) || 0) + 1
-      );
+  // Filter out purchased and return
+  return bestsellers
+    .filter((id) => !userContext.purchasedProductIds.includes(id))
+    .slice(0, maxRecommendations)
+    .map((id) => {
+      const product = PRODUCTS[id];
+      if (!product) {
+        throw new Error(`Product not found: ${id}`);
+      }
+      return {
+        ...product,
+        reason: 'Our most popular product. Thousands of learners love it.',
+        priority: 5,
+      };
     });
-
-    // Return personalized mix
-    const recommendations: QuizWithStats[] = [];
-    return recommendations.slice(0, limit);
-  } catch (error) {
-    console.error('Error getting personalized recommendations:', error);
-    return [];
-  }
 }
 
 /**
- * Get quiz completion status for a user
+ * Smart recommendation getter
+ * Returns personalized if available, falls back to bestsellers
  */
-export async function getUserQuizStatus(userId: string, quizSlugs: string[]) {
-  try {
-    const { data } = await supabase
-      .from('quiz_completions')
-      .select('quiz_slug, score, total_questions, created_at')
-      .eq('user_id', userId)
-      .in('quiz_slug', quizSlugs);
+export function getSmartRecommendations(
+  testScore: number,
+  testSilo: string,
+  userContext: UserContext,
+  maxRecommendations: number = 3
+): Array<Product & { reason: string; priority: number }> {
+  const recommendations = getRecommendations(testScore, testSilo, userContext, maxRecommendations);
 
-    const statusMap = new Map<
-      string,
-      { completed: boolean; score: number; percentage: number; date: string }
-    >();
-
-    data?.forEach((completion) => {
-      statusMap.set(completion.quiz_slug, {
-        completed: true,
-        score: completion.score,
-        percentage: Math.round(
-          (completion.score / completion.total_questions) * 100
-        ),
-        date: completion.created_at,
-      });
-    });
-
-    return statusMap;
-  } catch (error) {
-    console.error('Error getting user quiz status:', error);
-    return new Map();
+  // If we got at least 2 personalized recommendations, return them
+  if (recommendations.length >= 2) {
+    return recommendations;
   }
+
+  // Otherwise, pad with bestsellers
+  const fallback = getFallbackRecommendations(userContext, maxRecommendations - recommendations.length);
+  return [...recommendations, ...fallback].slice(0, maxRecommendations);
 }

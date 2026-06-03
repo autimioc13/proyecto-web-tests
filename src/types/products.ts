@@ -29,7 +29,7 @@ export interface Product {
  * Recommendation condition based on test performance
  */
 export interface RecommendationCondition {
-  testSilo: string; // "inteligencia", "personalidad", etc.
+  testSilo?: string; // "inteligencia", "personalidad", etc. - optional for general conditions
   minScore: number; // 0-100
   maxScore?: number; // optional upper bound
   minCompletedTests?: number;
