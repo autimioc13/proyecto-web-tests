@@ -7,6 +7,7 @@ import {
   BookOpen,
   LayoutDashboard,
   User,
+  ShoppingCart,
   Volume2,
   VolumeX,
   Moon,
@@ -14,18 +15,22 @@ import {
 } from 'lucide-react';
 import { useTheme } from '@/components/providers/ThemeProvider';
 import { useSoundContext } from '@/lib/contexts/SoundContext';
+import { useCart } from '@/lib/contexts/CartContext';
 
 interface NavItem {
   href: string;
   icon: React.ComponentType<{ size: number; className?: string }>;
   label: string;
   isToggle?: boolean;
+  badge?: number;
 }
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { isDark, setTheme } = useTheme();
   const { soundEnabled, toggleSound } = useSoundContext();
+  const { getTotalItems } = useCart();
+  const cartItemCount = getTotalItems();
 
   // Navigation items
   const navItems: NavItem[] = [
@@ -33,6 +38,7 @@ export default function Sidebar() {
     { href: '/tests', icon: BookOpen, label: 'Tests' },
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/profile', icon: User, label: 'Perfil' },
+    { href: '/cart', icon: ShoppingCart, label: 'Carrito', badge: cartItemCount },
   ];
 
   const isActive = (href: string): boolean => {
@@ -112,6 +118,18 @@ export default function Sidebar() {
                   }
                 `}
               />
+
+              {/* Badge for cart items */}
+              {item.badge ? (
+                <span className="
+                  absolute top-2 right-2
+                  bg-red-500 text-white text-xs font-bold
+                  w-5 h-5 rounded-full
+                  flex items-center justify-center
+                ">
+                  {item.badge}
+                </span>
+              ) : null}
 
               {/* Tooltip on hover */}
               <span
