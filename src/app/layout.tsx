@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { DEFAULT_METADATA } from '@/lib/metadata';
 import Navigation from '@/components/nav/Navigation';
+import Sidebar from '@/components/nav/Sidebar';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 import AnimatedGradient from '@/components/backgrounds/AnimatedGradient';
@@ -80,7 +81,8 @@ export default function RootLayout({
           <SoundProvider>
             <AnimatedGradient>
               <Navigation />
-              <main className="min-h-screen relative z-10">{children}</main>
+              <Sidebar />
+              <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
               <Footer />
               <CookieConsentBanner />
             </AnimatedGradient>
