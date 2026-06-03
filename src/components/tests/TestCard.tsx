@@ -12,7 +12,7 @@ export default function TestCard({ category }: TestCardProps) {
   return (
     <Link href={`/tests?category=${category.id}`}>
       <div
-        className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition-all duration-300 cursor-pointer h-full backdrop-blur-xl border border-white/20 bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10"
+        className="group relative overflow-hidden rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition-all duration-300 cursor-pointer h-full backdrop-blur-xl border border-gray-200/50 dark:border-white/20 bg-gray-100/50 dark:bg-white/5 hover:bg-gray-100/70 dark:hover:bg-white/10"
       >
         {/* Content */}
         <div className="relative p-6 h-full flex flex-col justify-between text-gray-900 dark:text-white">
@@ -37,7 +37,7 @@ export default function TestCard({ category }: TestCardProps) {
               <span className="text-xs font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-400">
                 Tests Disponibles
               </span>
-              <span className="inline-block bg-white/20 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 dark:text-white group-hover:bg-white/30 dark:group-hover:bg-white/15 transition-all border border-white/20">
+              <span className="inline-block bg-gray-200/50 dark:bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-bold text-gray-900 dark:text-white group-hover:bg-gray-200/70 dark:group-hover:bg-white/15 transition-all border border-gray-300/50 dark:border-white/20">
                 {category.testCount}+
               </span>
             </div>

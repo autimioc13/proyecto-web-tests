@@ -28,25 +28,25 @@ export default async function Home() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 mt-12">
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-white/20">
+            <div className="bg-gray-100/50 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-gray-200/50 dark:border-white/20">
               <div className="text-3xl font-bold text-gray-900 dark:text-white">250+</div>
               <div className="text-sm text-gray-600 dark:text-gray-300 mt-2">Tests Disponibles</div>
             </div>
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-white/20">
+            <div className="bg-gray-100/50 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-gray-200/50 dark:border-white/20">
               <div className="text-3xl font-bold text-gray-900 dark:text-white">1M+</div>
               <div className="text-sm text-gray-600 dark:text-gray-300 mt-2">Usuarios Activos</div>
             </div>
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-white/20">
+            <div className="bg-gray-100/50 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-gray-200/50 dark:border-white/20">
               <div className="text-3xl font-bold text-gray-900 dark:text-white">98%</div>
               <div className="text-sm text-gray-600 dark:text-gray-300 mt-2">Satisfacción</div>
             </div>
-            <div className="bg-white/10 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-white/20">
+            <div className="bg-gray-100/50 dark:bg-white/5 backdrop-blur-lg rounded-lg p-6 border border-gray-200/50 dark:border-white/20">
               <div className="text-3xl font-bold text-gray-900 dark:text-white">100%</div>
               <div className="text-sm text-gray-600 dark:text-gray-300 mt-2">Precisión Científica</div>
             </div>
           </div>
 
-          <Link href="/personalidad" className="inline-block px-8 py-3 bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/15 transition-all shadow-lg hover:shadow-xl backdrop-blur-sm border border-white/20">
+          <Link href="/personalidad" className="inline-flex items-center justify-center px-8 py-3 bg-gray-200/50 dark:bg-white/10 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-200/70 dark:hover:bg-white/15 transition-all shadow-lg hover:shadow-xl backdrop-blur-sm border border-gray-300/50 dark:border-white/20">
             Comenzar Ahora →
           </Link>
         </div>
@@ -89,7 +89,7 @@ export default async function Home() {
                 ⏱️ {trendingQuizzes[0].timeMinutes} minutos • {trendingQuizzes[0].questions.length}{' '}
                 preguntas
               </p>
-              <Link href={`/quiz/${trendingQuizzes[0].slug}`} className="inline-block px-6 py-2 bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-white/30 dark:hover:bg-white/15 transition-colors border border-white/20">
+              <Link href={`/quiz/${trendingQuizzes[0].slug}`} className="inline-block px-6 py-2 bg-gray-200/50 dark:bg-white/10 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-200/70 dark:hover:bg-white/15 transition-colors border border-gray-300/50 dark:border-white/20">
                 Empezar Test →
               </Link>
             </div>
@@ -108,7 +108,7 @@ export default async function Home() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {silos.map((silo) => (
             <Link key={silo.slug} href={`/${silo.slug}`}>
-              <div className="bg-white/10 dark:bg-white/5 text-gray-900 dark:text-white p-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition cursor-pointer h-full flex flex-col justify-center backdrop-blur-xl border border-white/20">
+              <div className="bg-gray-100/50 dark:bg-white/5 text-gray-900 dark:text-white p-8 rounded-lg shadow-lg hover:shadow-xl hover:shadow-white/20 transition cursor-pointer h-full flex flex-col justify-center backdrop-blur-xl border border-gray-200/50 dark:border-white/20">
                 <div className="text-5xl mb-4">{silo.emoji}</div>
                 <h3 className="text-2xl font-bold mb-2">{silo.label}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{silo.description}</p>
