@@ -12,7 +12,7 @@ export default function QuizCard({
   animated = true,
 }: QuizCardProps) {
   return (
-    <div className={`bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 ${
+    <div className={`bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-lg hover:shadow-xl hover:bg-white/15 dark:hover:bg-white/10 transition-all duration-300 ${
       animated ? 'animate-slideIn' : ''
     }`}>
       <style>{`

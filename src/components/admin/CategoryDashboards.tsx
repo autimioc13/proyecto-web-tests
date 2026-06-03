@@ -9,14 +9,7 @@ interface Metric {
 }
 
 export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
-  const categoryColors: Record<string, string> = {
-    purple: 'from-purple-400 to-purple-600',
-    blue: 'from-blue-400 to-blue-600',
-    green: 'from-green-400 to-green-600',
-    amber: 'from-amber-400 to-amber-600',
-    orange: 'from-orange-400 to-orange-600',
-    pink: 'from-pink-400 to-pink-600',
-  };
+  // Removed category color mappings - using grayscale only
 
   const categoryData = [
     { silo: 'personalidad', color: 'purple', icon: '💜' },
@@ -45,7 +38,7 @@ export function CategoryDashboards({ metrics }: { metrics: Metric[] }) {
           return (
             <div
               key={cat.silo}
-              className={`bg-gradient-to-br ${categoryColors[cat.color]} p-1 rounded-xl hover:shadow-lg transition-shadow`}
+              className="rounded-xl hover:shadow-lg transition-shadow"
             >
               <div className="bg-white/10 dark:bg-white/5 backdrop-blur-xl rounded-xl p-6 h-full border border-white/20 hover:bg-white/15 dark:hover:bg-white/10 transition-all">
                 <div className="flex justify-between items-start mb-4">

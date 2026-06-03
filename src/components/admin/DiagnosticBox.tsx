@@ -47,11 +47,7 @@ export default function DiagnosticBox({ metrics }: DiagnosticBoxProps) {
           <div key={idx} className="flex gap-3 text-sm">
             <AlertCircle
               size={16}
-              className={`flex-shrink-0 mt-0.5 ${
-                diag.level === 'warning'
-                  ? 'text-red-600'
-                  : 'text-blue-600'
-              }`}
+              className="flex-shrink-0 mt-0.5 text-gray-700 dark:text-gray-300"
             />
             <p className="text-gray-700 dark:text-gray-300">{diag.message}</p>
           </div>

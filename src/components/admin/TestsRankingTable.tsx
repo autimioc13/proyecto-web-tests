@@ -10,14 +10,7 @@ interface Metric {
 }
 
 export function TestsRankingTable({ data }: { data: Metric[] }) {
-  const siloColors: Record<string, string> = {
-    personalidad: 'bg-purple-50',
-    inteligencia: 'bg-blue-50',
-    logica: 'bg-green-50',
-    conocimiento: 'bg-amber-50',
-    productividad: 'bg-orange-50',
-    curiosidades: 'bg-pink-50',
-  };
+  // Removed silo color mappings - using grayscale only
 
   return (
     <div className="overflow-x-auto bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg">
@@ -38,7 +31,7 @@ export function TestsRankingTable({ data }: { data: Metric[] }) {
               <tr key={idx} className="border-b border-white/10 hover:bg-white/10 dark:hover:bg-white/5 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    {isTopPerformer && <Trophy size={18} className="text-amber-500" />}
+                    {isTopPerformer && <Trophy size={18} className="text-gray-700 dark:text-gray-300" />}
                     <span className="font-medium text-gray-900 dark:text-white">{row.quizSlug || 'Quiz'}</span>
                   </div>
                 </td>
@@ -48,7 +41,7 @@ export function TestsRankingTable({ data }: { data: Metric[] }) {
                   <div className="flex items-center justify-end gap-2">
                     <div className="w-16 h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-blue-600"
+                        className="h-full bg-white/40 dark:bg-white/30"
                         style={{ width: `${row.completionRate || 0}%` }}
                       />
                     </div>

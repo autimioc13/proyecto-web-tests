@@ -9,7 +9,7 @@ interface QuizCardProps {
 export default function QuizCard({ quiz }: QuizCardProps) {
   return (
     <Link href={`/quiz/${quiz.slug}`}>
-      <div className="card p-6 h-full flex flex-col hover:shadow-lg hover:shadow-purple-500/20 transition cursor-pointer border border-white/20 rounded-lg bg-white/10 dark:bg-white/5 backdrop-blur-xl">
+      <div className="card p-6 h-full flex flex-col hover:shadow-lg hover:shadow-white/20 transition cursor-pointer border border-white/20 rounded-lg bg-white/10 dark:bg-white/5 backdrop-blur-xl hover:bg-white/15 dark:hover:bg-white/10">
         <div className="text-4xl mb-4">{quiz.emoji}</div>
 
         <h3 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">{quiz.title}</h3>
