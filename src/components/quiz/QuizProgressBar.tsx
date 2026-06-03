@@ -35,14 +35,14 @@ export default function QuizProgressBar({
         }
       `}</style>
       <div className="flex justify-between items-center mb-3">
-        <h3 className="font-bold text-gray-900">
+        <h3 className="font-bold text-gray-900 dark:text-white">
           Pregunta {current} de {total}
         </h3>
-        <span className="text-sm font-semibold text-purple-600">
+        <span className="text-sm font-semibold text-purple-600 dark:text-purple-400">
           {Math.round(displayProgress)}%
         </span>
       </div>
-      <div className="h-3 bg-gray-200 rounded-full overflow-hidden shadow-sm">
+      <div className="h-3 bg-white/20 dark:bg-white/10 backdrop-blur-sm rounded-full overflow-hidden shadow-sm border border-white/20">
         <div
           className="h-full bg-gradient-to-r from-purple-600 to-pink-500 transition-all duration-500 ease-out"
           style={{

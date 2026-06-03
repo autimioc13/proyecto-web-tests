@@ -80,14 +80,14 @@ export default function QuizFeedback({
         {isCorrect ? (
           <>
             <CheckCircle size={64} className="text-green-500 drop-shadow-lg" />
-            <div className="bg-green-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center">
+            <div className="bg-green-500/80 backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-green-400/50">
               {message || '¡Correcto!'}
             </div>
           </>
         ) : (
           <>
             <XCircle size={64} className="text-red-500 drop-shadow-lg" />
-            <div className="bg-red-500 text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center">
+            <div className="bg-red-500/80 backdrop-blur-lg text-white px-6 py-3 rounded-lg font-semibold shadow-lg text-center border border-red-400/50">
               {message || 'Incorrecto'}
             </div>
           </>
