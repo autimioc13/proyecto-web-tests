@@ -20,40 +20,39 @@ export function TestsRankingTable({ data }: { data: Metric[] }) {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-xl shadow-lg">
       <table className="w-full">
         <thead>
-          <tr className="bg-gray-100 border-b-2 border-gray-300">
-            <th className="px-4 py-3 text-left text-sm font-bold text-gray-700">TEST</th>
-            <th className="px-4 py-3 text-left text-sm font-bold text-gray-700">SILO</th>
-            <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">COMPLETADAS</th>
-            <th className="px-4 py-3 text-right text-sm font-bold text-gray-700">% COMPL.</th>
+          <tr className="bg-white/15 dark:bg-white/10 border-b border-white/20">
+            <th className="px-4 py-3 text-left text-sm font-bold text-gray-900 dark:text-white">TEST</th>
+            <th className="px-4 py-3 text-left text-sm font-bold text-gray-900 dark:text-white">SILO</th>
+            <th className="px-4 py-3 text-right text-sm font-bold text-gray-900 dark:text-white">COMPLETADAS</th>
+            <th className="px-4 py-3 text-right text-sm font-bold text-gray-900 dark:text-white">% COMPL.</th>
           </tr>
         </thead>
         <tbody>
           {data.map((row, idx) => {
-            const bgColor = siloColors[row.silo || ''] || 'bg-gray-50';
             const isTopPerformer = (row.completionRate || 0) > 80;
-            
+
             return (
-              <tr key={idx} className={`${bgColor} border-b hover:shadow-md transition-all`}>
+              <tr key={idx} className="border-b border-white/10 hover:bg-white/10 dark:hover:bg-white/5 transition-colors">
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
                     {isTopPerformer && <Trophy size={18} className="text-amber-500" />}
-                    <span className="font-medium text-gray-900">{row.quizSlug || 'Quiz'}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{row.quizSlug || 'Quiz'}</span>
                   </div>
                 </td>
-                <td className="px-4 py-3 font-medium text-gray-700">{row.silo || 'General'}</td>
-                <td className="px-4 py-3 text-right font-bold text-gray-900">{row.totalCompletes || 0}</td>
+                <td className="px-4 py-3 font-medium text-gray-700 dark:text-gray-300">{row.silo || 'General'}</td>
+                <td className="px-4 py-3 text-right font-bold text-gray-900 dark:text-white">{row.totalCompletes || 0}</td>
                 <td className="px-4 py-3 text-right">
                   <div className="flex items-center justify-end gap-2">
-                    <div className="w-16 h-2 bg-gray-300 rounded-full overflow-hidden">
-                      <div 
+                    <div className="w-16 h-2 bg-white/20 dark:bg-white/10 rounded-full overflow-hidden">
+                      <div
                         className="h-full bg-blue-600"
                         style={{ width: `${row.completionRate || 0}%` }}
                       />
                     </div>
-                    <span className="font-bold text-gray-900">{row.completionRate || 0}%</span>
+                    <span className="font-bold text-gray-900 dark:text-white">{row.completionRate || 0}%</span>
                   </div>
                 </td>
               </tr>
