@@ -19,29 +19,29 @@ export default function QuizAnswerButton({
   className = '',
   ...props
 }: QuizAnswerButtonProps) {
-  let borderColor = 'border-gray-300';
-  let bgColor = 'bg-white hover:bg-gray-50';
-  let textColor = 'text-gray-900';
+  let borderColor = 'border-white/20';
+  let bgColor = 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10';
+  let textColor = 'text-gray-900 dark:text-white';
 
   if (answered) {
     if (correct) {
-      borderColor = 'border-green-500';
-      bgColor = 'bg-green-50';
-      textColor = 'text-green-900';
+      borderColor = 'border-green-500/50';
+      bgColor = 'bg-green-500/20 dark:bg-green-500/10';
+      textColor = 'text-green-900 dark:text-green-100';
     } else {
-      borderColor = 'border-red-500';
-      bgColor = 'bg-red-50';
-      textColor = 'text-red-900';
+      borderColor = 'border-red-500/50';
+      bgColor = 'bg-red-500/20 dark:bg-red-500/10';
+      textColor = 'text-red-900 dark:text-red-100';
     }
   } else if (selected) {
-    borderColor = 'border-purple-600';
-    bgColor = 'bg-purple-50';
-    textColor = 'text-purple-900';
+    borderColor = 'border-purple-500/60';
+    bgColor = 'bg-purple-500/20 dark:bg-purple-500/10 shadow-lg shadow-purple-500/20';
+    textColor = 'text-purple-900 dark:text-purple-100';
   }
 
   return (
     <button
-      className={`relative w-full p-4 rounded-lg text-left font-semibold transition-all duration-200 border-2 ${borderColor} ${bgColor} ${textColor} ${className}`}
+      className={`relative w-full p-4 rounded-lg text-left font-semibold transition-all duration-200 border-2 ${borderColor} ${bgColor} ${textColor} backdrop-blur-md ${className}`}
       {...props}
     >
       <div className="flex items-center gap-4">

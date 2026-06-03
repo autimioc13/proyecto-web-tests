@@ -22,12 +22,12 @@ export default function PrimaryButton({
   disabled,
   ...props
 }: PrimaryButtonProps) {
-  const baseStyles = 'rounded-lg transition-all duration-200 flex items-center justify-center gap-2 font-semibold';
+  const baseStyles = 'rounded-lg transition-all duration-200 flex items-center justify-center gap-2 font-semibold backdrop-blur-sm';
 
   const variants = {
-    gradient: 'bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:shadow-xl hover:shadow-purple-500/50 hover:scale-105 disabled:opacity-50',
-    solid: 'bg-purple-600 text-white hover:bg-purple-700 hover:shadow-lg disabled:opacity-50',
-    outline: 'border-2 border-purple-600 text-purple-600 hover:bg-purple-50 disabled:opacity-50',
+    gradient: 'bg-gradient-to-r from-purple-600 to-pink-500 text-white hover:shadow-xl hover:shadow-purple-500/50 hover:scale-105 disabled:opacity-50 border border-white/20',
+    solid: 'bg-purple-600/80 backdrop-blur-md text-white hover:bg-purple-700 hover:shadow-lg disabled:opacity-50 border border-white/20',
+    outline: 'border-2 border-purple-600/50 text-purple-600 dark:text-purple-400 hover:bg-purple-600/10 dark:hover:bg-purple-600/20 disabled:opacity-50 backdrop-blur-md',
   };
 
   const sizes = {
