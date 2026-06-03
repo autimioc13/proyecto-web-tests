@@ -2,13 +2,14 @@ import type { Metadata, Viewport } from 'next';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { DEFAULT_METADATA } from '@/lib/metadata';
-// Removed Navigation - using Sidebar only for cleaner UI
-import Sidebar from '@/components/nav/Sidebar';
+// Using SidebarWrapper for role-based navigation (Admin vs Regular users)
+import SidebarWrapper from '@/components/nav/SidebarWrapper';
 import Footer from '@/components/Footer';
 import CookieConsentBanner from '@/components/compliance/CookieConsentBanner';
 // Removed AnimatedGradient - using static background for glassmorphism effect
 import { SoundProvider } from '@/components/providers/SoundProvider';
 import ThemeProvider from '@/components/providers/ThemeProvider';
+import { CartProvider } from '@/lib/contexts/CartContext';
 import './globals.css';
 
 export const viewport: Viewport = {
@@ -77,14 +78,16 @@ export default function RootLayout({
         />
       </head>
       <body className="text-gray-900 dark:text-white antialiased bg-gradient-to-br from-slate-50 via-purple-50 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
-        <ThemeProvider>
-          <SoundProvider>
-            <Sidebar />
-            <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
-            <Footer />
-            <CookieConsentBanner />
-          </SoundProvider>
-        </ThemeProvider>
+        <CartProvider>
+          <ThemeProvider>
+            <SoundProvider>
+              <SidebarWrapper />
+              <main className="min-h-screen relative z-10 md:ml-24">{children}</main>
+              <Footer />
+              <CookieConsentBanner />
+            </SoundProvider>
+          </ThemeProvider>
+        </CartProvider>
         <Analytics />
         <SpeedInsights />
       </body>
