@@ -12,7 +12,7 @@ export default function QuizCard({
   animated = true,
 }: QuizCardProps) {
   return (
-    <div className={`backdrop-blur-lg bg-white/80 border border-white/20 rounded-2xl p-8 shadow-2xl ${
+    <div className={`bg-white/10 dark:bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 ${
       animated ? 'animate-slideIn' : ''
     }`}>
       <style>{`
@@ -30,7 +30,7 @@ export default function QuizCard({
           animation: slideIn 0.5s ease-out;
         }
       `}</style>
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 leading-tight">
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
         {question}
       </h2>
       <div className="space-y-4">{children}</div>
