@@ -62,7 +62,6 @@ export default function Sidebar() {
             text-gray-900 dark:text-white
             hover:scale-110 transition-transform duration-300
           "
-          title="QuizLab"
         >
           🧪
         </Link>
@@ -88,7 +87,6 @@ export default function Sidebar() {
                     : 'hover:bg-white/10 dark:hover:bg-white/5 hover:backdrop-blur-lg'
                 }
               `}
-              title={item.label}
             >
               {/* Glow effect on active */}
               {active && (
@@ -153,7 +151,6 @@ export default function Sidebar() {
                 : 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
             }
           `}
-          title={soundEnabled ? 'Desactivar sonido' : 'Activar sonido'}
           aria-pressed={soundEnabled}
         >
           {/* Glow effect on hover */}
@@ -207,7 +204,6 @@ export default function Sidebar() {
                 : 'bg-white/10 dark:bg-white/5 hover:bg-white/15 dark:hover:bg-white/10'
             }
           `}
-          title={isDark ? 'Tema claro' : 'Tema oscuro'}
           aria-pressed={isDark}
         >
           {/* Glow effect on hover */}
