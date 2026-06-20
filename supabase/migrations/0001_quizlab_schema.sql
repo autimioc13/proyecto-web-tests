@@ -75,6 +75,7 @@ ALTER TABLE public.tests         ENABLE ROW LEVEL SECURITY;
 -- ========== RLS Policies ==========
 
 -- users: owner can read/update own
+DROP POLICY IF EXISTS "users_select_own" ON public.users;
 CREATE POLICY "users_select_own" ON public.users
   FOR SELECT USING (auth.uid() = id);
 CREATE POLICY "users_insert_own" ON public.users

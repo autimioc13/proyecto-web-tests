@@ -1,4 +1,4 @@
-import { AnalyticsEvent, AggregatedMetrics } from '@/types';
+import { QuizAnalyticsEvent as AnalyticsEvent, AggregatedMetrics } from '@/types';
 
 export interface DataAdapter {
   saveEvent(event: AnalyticsEvent): Promise<void>;

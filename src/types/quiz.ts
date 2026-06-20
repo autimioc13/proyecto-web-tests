@@ -63,7 +63,7 @@ export interface ResultPacket {
   type: QuizType;
 }
 
-export interface AnalyticsEvent {
+export interface QuizAnalyticsEvent {
   eventName: 'quiz_start' | 'quiz_question_view' | 'quiz_complete' | 'quiz_abandon' | 'quiz_share' | 'quiz_restart' | 'ad_impression';
   quizSlug: string;
   timestamp: number;

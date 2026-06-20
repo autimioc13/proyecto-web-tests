@@ -1,72 +1,180 @@
 'use client';
 
-import { useCallback } from 'react';
-import { AnalyticsEvent } from '@/types';
+import { useCallback, useEffect } from 'react';
+import { EventType } from '@/types/analytics';
+import { useAnalytics as useAnalyticsSDK } from '@/lib/analytics';
 
-declare global {
-  interface Window {
-    gtag?: (...args: any[]) => void;
-  }
-}
-
+/**
+ * Hook for tracking analytics events in React components
+ * Uses the analytics SDK with batch queue system
+ */
 export const useAnalytics = () => {
-  const getSessionId = useCallback(() => {
-    if (typeof window === 'undefined') return '';
-    let sessionId = sessionStorage.getItem('sessionId');
-    if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      sessionStorage.setItem('sessionId', sessionId);
-    }
-    return sessionId;
-  }, []);
+  const analytics = useAnalyticsSDK();
+
+  useEffect(() => {
+    // Flush events on page unload
+    const handleBeforeUnload = () => {
+      analytics.trackEvent('cart_viewed', {
+        action: 'page_unload',
+      });
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [analytics]);
 
   const trackEvent = useCallback(
-    async (
-      eventName:
-        | 'quiz_start'
-        | 'quiz_question_view'
-        | 'quiz_complete'
-        | 'quiz_abandon'
-        | 'quiz_share'
-        | 'quiz_restart'
-        | 'ad_impression',
-      quizSlug: string,
-      metadata?: Record<string, any>
-    ) => {
-      const sessionId = getSessionId();
-
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', eventName, {
-          quiz_slug: quizSlug,
-          session_id: sessionId,
-          ...metadata,
-        });
-      }
-
-      const event: AnalyticsEvent = {
-        eventName: eventName as any,
-        quizSlug,
-        timestamp: Date.now(),
-        sessionId,
-        metadata,
-      };
-
-      if (navigator.sendBeacon) {
-        navigator.sendBeacon(
-          '/api/analytics',
-          JSON.stringify(event)
-        );
-      } else {
-        fetch('/api/analytics', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(event),
-          keepalive: true,
-        }).catch(() => {});
-      }
+    (eventType: EventType, metadata?: Record<string, any>) => {
+      analytics.trackEvent(eventType, metadata);
     },
-    [getSessionId]
+    [analytics]
   );
 
-  return { trackEvent };
+  const trackQuizStarted = useCallback(
+    (quizId: string, metadata?: Record<string, any>) => {
+      trackEvent('quiz_started', {
+        quiz_id: quizId,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackQuizCompleted = useCallback(
+    (quizId: string, score: number, metadata?: Record<string, any>) => {
+      trackEvent('quiz_completed', {
+        quiz_id: quizId,
+        score,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackResultViewed = useCallback(
+    (quizId: string, resultId: string, metadata?: Record<string, any>) => {
+      trackEvent('result_viewed', {
+        quiz_id: quizId,
+        result_id: resultId,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackProductViewed = useCallback(
+    (productId: string, productTitle: string, metadata?: Record<string, any>) => {
+      trackEvent('product_viewed', {
+        product_id: productId,
+        product_title: productTitle,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackProductAddedToCart = useCallback(
+    (productId: string, price: number, metadata?: Record<string, any>) => {
+      trackEvent('product_added_to_cart', {
+        product_id: productId,
+        price,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackCartViewed = useCallback((itemCount: number, metadata?: Record<string, any>) => {
+    trackEvent('cart_viewed', {
+      item_count: itemCount,
+      ...metadata,
+    });
+  }, [trackEvent]);
+
+  const trackCheckoutStarted = useCallback((totalPrice: number, metadata?: Record<string, any>) => {
+    trackEvent('checkout_started', {
+      total_price: totalPrice,
+      ...metadata,
+    });
+  }, [trackEvent]);
+
+  const trackOrderCreated = useCallback(
+    (orderId: string, totalPrice: number, itemCount: number, metadata?: Record<string, any>) => {
+      trackEvent('order_created', {
+        order_id: orderId,
+        total_price: totalPrice,
+        item_count: itemCount,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackQuizAbandoned = useCallback(
+    (quizId: string, questionsAnswered: number, metadata?: Record<string, any>) => {
+      trackEvent('quiz_abandoned', {
+        quiz_id: quizId,
+        questions_answered: questionsAnswered,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackQuizRestarted = useCallback(
+    (quizId: string, metadata?: Record<string, any>) => {
+      trackEvent('quiz_restarted', {
+        quiz_id: quizId,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackQuizShared = useCallback(
+    (quizId: string, platform: string, metadata?: Record<string, any>) => {
+      trackEvent('quiz_shared', {
+        quiz_id: quizId,
+        platform,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackAdImpression = useCallback(
+    (adId: string, placement: string, metadata?: Record<string, any>) => {
+      trackEvent('ad_impression', {
+        ad_id: adId,
+        placement,
+        ...metadata,
+      });
+    },
+    [trackEvent]
+  );
+
+  const getSessionId = useCallback(() => analytics.getSessionId(), [analytics]);
+
+  const setMetadata = useCallback(
+    (key: string, value: any) => analytics.setMetadata(key, value),
+    [analytics]
+  );
+
+  return {
+    trackEvent,
+    trackQuizStarted,
+    trackQuizCompleted,
+    trackResultViewed,
+    trackProductViewed,
+    trackProductAddedToCart,
+    trackCartViewed,
+    trackCheckoutStarted,
+    trackOrderCreated,
+    trackQuizAbandoned,
+    trackQuizRestarted,
+    trackQuizShared,
+    trackAdImpression,
+    getSessionId,
+    setMetadata,
+  };
 };

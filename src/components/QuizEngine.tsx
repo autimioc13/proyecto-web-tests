@@ -26,11 +26,13 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
 
   const handleStart = useCallback(() => {
     setState('question');
-    trackEvent('quiz_start', quiz.slug, {
+    trackEvent('quiz_started', {
+      quiz_id: quiz.slug,
       quiz_title: quiz.title,
       quiz_type: quiz.type,
+      silo: quiz.silo,
     });
-  }, [quiz.slug, quiz.title, quiz.type, trackEvent]);
+  }, [quiz.slug, quiz.title, quiz.type, quiz.silo, trackEvent]);
 
   const handleSelectOption = useCallback(
     (optionId: string) => {
@@ -48,7 +50,8 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
         playSound('incorrect', 0.6);
       }
 
-      trackEvent('quiz_question_view', quiz.slug, {
+      trackEvent('quiz_question_view', {
+        quiz_id: quiz.slug,
         question_index: currentQuestionIndex,
         question_id: currentQuestion.id,
         selected_option: optionId,
@@ -65,7 +68,8 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
       setResult(calculatedResult);
       setState('result');
 
-      trackEvent('quiz_complete', quiz.slug, {
+      trackEvent('quiz_completed', {
+        quiz_id: quiz.slug,
         total_questions: quiz.questions.length,
         answered_questions: answers.size,
         result_id: calculatedResult.result.id || 'unknown',
@@ -80,17 +84,19 @@ export default function QuizEngine({ quiz }: QuizEngineProps) {
     setLevelUpTriggered(false);
     setState('intro');
 
-    trackEvent('quiz_restart', quiz.slug, {});
+    trackEvent('quiz_restarted', { quiz_id: quiz.slug });
   }, [quiz.slug, trackEvent]);
 
   const handleShare = useCallback(() => {
-    trackEvent('quiz_share', quiz.slug, {
+    trackEvent('quiz_shared', {
+      quiz_id: quiz.slug,
       result_id: result?.result.id || 'unknown',
     });
   }, [quiz.slug, result, trackEvent]);
 
   const handleAbandon = useCallback(() => {
-    trackEvent('quiz_abandon', quiz.slug, {
+    trackEvent('quiz_abandoned', {
+      quiz_id: quiz.slug,
       abandoned_at_question: currentQuestionIndex,
       answered_questions: answers.size,
     });

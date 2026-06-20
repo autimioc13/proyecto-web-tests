@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { GameificationEvents } from '@/lib/analytics';
+import { GamificationEvents } from '@/lib/analytics';
 import { XP_CONFIG, DifficultyLevel } from '@/lib/xp-config';
 
 const supabase = createClient(
@@ -88,7 +88,7 @@ export async function recordQuizCompletion(
     });
 
     // Track initial quiz completion
-    GameificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
+    GamificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
   } else {
     const oldLevel = stats.level;
     const newTotalXP = stats.total_xp + xpEarned;
@@ -106,11 +106,11 @@ export async function recordQuizCompletion(
       .eq('user_id', userId);
 
     // Track quiz completion
-    GameificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
+    GamificationEvents.quizCompleted(xpEarned, (score / total) * 100, quizSlug);
 
     // Track level up if it happened
     if (newLevel > oldLevel) {
-      GameificationEvents.levelUp(newLevel, newTotalXP);
+      GamificationEvents.levelUp(newLevel, newTotalXP);
     }
   }
 

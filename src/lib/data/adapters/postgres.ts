@@ -1,4 +1,4 @@
-import { AnalyticsEvent, AggregatedMetrics } from '@/types';
+import { QuizAnalyticsEvent as AnalyticsEvent, AggregatedMetrics } from '@/types';
 import { DataAdapter } from '../adapter';
 
 export class PostgresAdapter implements DataAdapter {

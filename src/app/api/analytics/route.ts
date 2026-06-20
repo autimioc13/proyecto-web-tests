@@ -1,5 +1,5 @@
 import { getDataAdapter } from '@/lib/data';
-import { AnalyticsEvent } from '@/types';
+import { QuizAnalyticsEvent as AnalyticsEvent } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {

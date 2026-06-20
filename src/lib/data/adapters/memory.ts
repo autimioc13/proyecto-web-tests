@@ -1,4 +1,4 @@
-import { AnalyticsEvent, AggregatedMetrics, SiloSlug } from '@/types';
+import { QuizAnalyticsEvent as AnalyticsEvent, AggregatedMetrics, SiloSlug } from '@/types';
 import { DataAdapter } from '../adapter';
 
 export class MemoryAdapter implements DataAdapter {
