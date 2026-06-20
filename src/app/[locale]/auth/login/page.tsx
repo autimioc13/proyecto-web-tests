@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/navigation';
 import { Mail, Code, Loader } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/lib/contexts/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
+  const t = useTranslations('auth');
+  const tc = useTranslations('common');
   const { login, loginWithGoogle, loginWithGithub, loading, error } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -64,8 +66,8 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Bienvenido</h1>
-          <p className="text-white/60">Inicia sesión en QuizLab</p>
+          <h1 className="text-4xl font-bold text-white mb-2">{t('loginTitle')}</h1>
+          <p className="text-white/60">{t('loginSubtitle')}</p>
         </div>
 
         {/* Login Form Container */}
@@ -81,7 +83,7 @@ export default function LoginPage() {
           <form onSubmit={handleEmailLogin} className="space-y-4">
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Email</label>
+              <label className="block text-sm font-medium text-white mb-2">{t('email')}</label>
               <input
                 type="email"
                 value={email}
@@ -101,7 +103,7 @@ export default function LoginPage() {
 
             {/* Password Input */}
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Contraseña</label>
+              <label className="block text-sm font-medium text-white mb-2">{t('password')}</label>
               <input
                 type="password"
                 value={password}
@@ -125,7 +127,7 @@ export default function LoginPage() {
                 href="/auth/reset-password"
                 className="text-sm text-purple-400 hover:text-purple-300 transition-colors"
               >
-                ¿Olvidaste tu contraseña?
+                {t('forgotPassword')}
               </Link>
             </div>
 
@@ -146,10 +148,10 @@ export default function LoginPage() {
               {isSubmitting || loading ? (
                 <>
                   <Loader size={20} className="animate-spin" />
-                  Iniciando sesión...
+                  {t('loginLoading')}
                 </>
               ) : (
-                'Iniciar Sesión'
+                t('loginButton')
               )}
             </button>
           </form>
@@ -157,7 +159,7 @@ export default function LoginPage() {
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-white/20"></div>
-            <span className="text-white/60 text-sm">O continúa con</span>
+            <span className="text-white/60 text-sm">{t('continueWith')}</span>
             <div className="flex-1 h-px bg-white/20"></div>
           </div>
 
@@ -206,9 +208,9 @@ export default function LoginPage() {
         {/* Signup Link */}
         <div className="text-center">
           <p className="text-white/60">
-            ¿No tienes cuenta?{' '}
+            {t('noAccount')}{' '}
             <Link href="/auth/signup" className="text-purple-400 hover:text-purple-300 font-semibold">
-              Regístrate
+              {t('signupLink')}
             </Link>
           </p>
         </div>
@@ -216,7 +218,7 @@ export default function LoginPage() {
         {/* Back to Home */}
         <div className="text-center mt-6">
           <Link href="/" className="text-white/60 hover:text-white text-sm">
-            ← Volver al inicio
+            {tc('backToHome')}
           </Link>
         </div>
       </div>

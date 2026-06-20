@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { Link, useRouter } from '@/i18n/navigation';
 import { Mail, Code, Loader, AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useAuth } from '@/lib/contexts/AuthContext';
 
 export default function SignupPage() {
   const router = useRouter();
+  const t = useTranslations('auth');
+  const tc = useTranslations('common');
   const { signup, signupWithGoogle, signupWithGithub, loading, error } = useAuth();
 
   const [firstName, setFirstName] = useState('');
@@ -99,8 +101,8 @@ export default function SignupPage() {
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-white mb-2">Únete a QuizLab</h1>
-          <p className="text-white/60">Crea tu cuenta gratuitamente</p>
+          <h1 className="text-4xl font-bold text-white mb-2">{t('signupTitle')}</h1>
+          <p className="text-white/60">{t('signupSubtitle')}</p>
         </div>
 
         {/* Signup Form Container */}
@@ -118,7 +120,7 @@ export default function SignupPage() {
             {/* Name Inputs */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-white mb-2">Nombre</label>
+                <label className="block text-sm font-medium text-white mb-2">{t('firstName')}</label>
                 <input
                   type="text"
                   value={firstName}
@@ -136,7 +138,7 @@ export default function SignupPage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-white mb-2">Apellido</label>
+                <label className="block text-sm font-medium text-white mb-2">{t('lastName')}</label>
                 <input
                   type="text"
                   value={lastName}
@@ -157,7 +159,7 @@ export default function SignupPage() {
 
             {/* Email Input */}
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Email</label>
+              <label className="block text-sm font-medium text-white mb-2">{t('email')}</label>
               <input
                 type="email"
                 value={email}
@@ -177,7 +179,7 @@ export default function SignupPage() {
 
             {/* Password Input */}
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Contraseña</label>
+              <label className="block text-sm font-medium text-white mb-2">{t('password')}</label>
               <input
                 type="password"
                 value={password}
@@ -197,7 +199,7 @@ export default function SignupPage() {
 
             {/* Confirm Password Input */}
             <div>
-              <label className="block text-sm font-medium text-white mb-2">Confirmar Contraseña</label>
+              <label className="block text-sm font-medium text-white mb-2">{t('confirmPassword')}</label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -226,10 +228,7 @@ export default function SignupPage() {
                 className="w-4 h-4 mt-1 cursor-pointer"
               />
               <label htmlFor="terms" className="text-sm text-white/70 cursor-pointer">
-                Acepto los{' '}
-                <Link href="/terms" className="text-purple-400 hover:text-purple-300">
-                  términos y condiciones
-                </Link>
+                {t('agreeTerms')}
               </label>
             </div>
 
@@ -250,10 +249,10 @@ export default function SignupPage() {
               {isSubmitting || loading ? (
                 <>
                   <Loader size={20} className="animate-spin" />
-                  Creando cuenta...
+                  {t('signupLoading')}
                 </>
               ) : (
-                'Crear Cuenta'
+                t('signupButton')
               )}
             </button>
           </form>
@@ -261,7 +260,7 @@ export default function SignupPage() {
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-white/20"></div>
-            <span className="text-white/60 text-sm">O regístrate con</span>
+            <span className="text-white/60 text-sm">{t('orSignupWith')}</span>
             <div className="flex-1 h-px bg-white/20"></div>
           </div>
 
@@ -308,9 +307,9 @@ export default function SignupPage() {
         {/* Login Link */}
         <div className="text-center">
           <p className="text-white/60">
-            ¿Ya tienes cuenta?{' '}
+            {t('haveAccount')}{' '}
             <Link href="/auth/login" className="text-purple-400 hover:text-purple-300 font-semibold">
-              Inicia sesión
+              {t('loginLink')}
             </Link>
           </p>
         </div>
@@ -318,7 +317,7 @@ export default function SignupPage() {
         {/* Back to Home */}
         <div className="text-center mt-6">
           <Link href="/" className="text-white/60 hover:text-white text-sm">
-            ← Volver al inicio
+            {tc('backToHome')}
           </Link>
         </div>
       </div>

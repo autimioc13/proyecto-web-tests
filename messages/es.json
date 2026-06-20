@@ -49,6 +49,14 @@
     "noAccount": "¿No tienes cuenta?",
     "haveAccount": "¿Ya tienes cuenta?",
     "verifyEmailTitle": "Revisa tu correo",
-    "goToLogin": "Ir a iniciar sesión"
+    "goToLogin": "Ir a iniciar sesión",
+    "loginLoading": "Iniciando sesión...",
+    "signupLoading": "Creando cuenta...",
+    "loginLink": "Inicia sesión",
+    "signupLink": "Regístrate",
+    "agreeTerms": "Acepto los términos y condiciones",
+    "verifyEmailLeadTo": "Te enviamos un enlace de confirmación a",
+    "verifyEmailLeadGeneric": "Te enviamos un enlace de confirmación a tu dirección de correo.",
+    "verifyEmailSpam": "Haz clic en el enlace del correo para activar tu cuenta. Si no lo ves, revisa tu carpeta de spam o promociones."
   }
 }

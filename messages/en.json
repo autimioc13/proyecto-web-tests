@@ -49,6 +49,14 @@
     "noAccount": "Don't have an account?",
     "haveAccount": "Already have an account?",
     "verifyEmailTitle": "Check your email",
-    "goToLogin": "Go to sign in"
+    "goToLogin": "Go to sign in",
+    "loginLoading": "Signing in...",
+    "signupLoading": "Creating account...",
+    "loginLink": "Sign in",
+    "signupLink": "Sign up",
+    "agreeTerms": "I accept the terms and conditions",
+    "verifyEmailLeadTo": "We sent a confirmation link to",
+    "verifyEmailLeadGeneric": "We sent a confirmation link to your email address.",
+    "verifyEmailSpam": "Click the link in the email to activate your account. If you don't see it, check your spam or promotions folder."
   }
 }
