@@ -9,7 +9,7 @@ import { Product } from '@/types/products';
 export const PRODUCTS: Record<string, Product> = {
   // Personality Reports
   'personality-deep-dive': {
-    id: 'personality-deep-dive',
+    id: 'pri_01kvhps1w3bax4qs1de0qvdyvz',
     title: 'Personality Deep Dive Report',
     description: 'Comprehensive analysis of your personality type with actionable insights for personal growth.',
     category: 'personality-report',
@@ -27,7 +27,7 @@ export const PRODUCTS: Record<string, Product> = {
 
   // Learning Courses
   'logic-advanced-course': {
-    id: 'logic-advanced-course',
+    id: 'pri_01kvhpr1gdz61mcgywdxa5q691',
     title: 'Advanced Logic Mastery Course',
     description: 'Master complex logical reasoning with 10+ hours of video content and exercises.',
     category: 'learning-course',
@@ -44,7 +44,7 @@ export const PRODUCTS: Record<string, Product> = {
   },
 
   'intelligence-fundamentals-course': {
-    id: 'intelligence-fundamentals-course',
+    id: 'pri_01kvhpqa8w276vb1z33ay3167r',
     title: 'Intelligence Fundamentals Course',
     description: 'Build strong foundations in critical thinking and analytical reasoning.',
     category: 'learning-course',
@@ -61,7 +61,7 @@ export const PRODUCTS: Record<string, Product> = {
   },
 
   'productivity-mastery': {
-    id: 'productivity-mastery',
+    id: 'pri_01kvhpp65tybzf3qs0xfn29vm8',
     title: 'Productivity Mastery Course',
     description: 'Learn proven systems to increase productivity and achieve your goals faster.',
     category: 'learning-course',
@@ -79,7 +79,7 @@ export const PRODUCTS: Record<string, Product> = {
 
   // Certificates
   'basic-certificate': {
-    id: 'basic-certificate',
+    id: 'pri_01kvhpnea2dxyxg15acvap49pv',
     title: 'QuizLab Achievement Certificate',
     description: 'Official certificate proving your test achievement, printable and shareable.',
     category: 'certificate',
@@ -95,7 +95,7 @@ export const PRODUCTS: Record<string, Product> = {
   },
 
   'premium-certificate': {
-    id: 'premium-certificate',
+    id: 'pri_01kvhpme8gcvv71p6109efwj4r',
     title: 'Premium Achievement Certificate',
     description: 'Luxury certificate with enhanced design, perfect for professional portfolios.',
     category: 'certificate',
@@ -113,7 +113,7 @@ export const PRODUCTS: Record<string, Product> = {
 
   // Bundles
   'knowledge-master-bundle': {
-    id: 'knowledge-master-bundle',
+    id: 'pri_01kvhpkkzcxd8ab0nf5rea8fzs',
     title: 'Knowledge Master Bundle',
     description: '3 advanced courses + premium certificate. Save $20 vs. individual purchase.',
     category: 'premium-bundle',
@@ -131,7 +131,7 @@ export const PRODUCTS: Record<string, Product> = {
   },
 
   'serious-learner-bundle': {
-    id: 'serious-learner-bundle',
+    id: 'pri_01kvhpje4tsk32tsbrxddepcx7',
     title: 'Serious Learner Bundle',
     description: 'Perfect for committed learners. 2 courses + personality report.',
     category: 'premium-bundle',
@@ -148,7 +148,7 @@ export const PRODUCTS: Record<string, Product> = {
 
   // API Access
   'developer-api-access': {
-    id: 'developer-api-access',
+    id: 'pri_01kvhph91g00sasry5dzeg221j',
     title: 'Developer API Access',
     description: 'Access QuizLab API for integration into your platform. Per month.',
     category: 'api-access',
