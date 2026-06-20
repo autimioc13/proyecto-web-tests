@@ -1,0 +1,54 @@
+{
+  "common": {
+    "appName": "QuizLab",
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "back": "Voltar",
+    "backToHome": "← Voltar ao início",
+    "continue": "Continuar"
+  },
+  "nav": {
+    "home": "Início",
+    "tests": "Testes",
+    "discover": "Descobrir",
+    "dashboard": "Painel",
+    "profile": "Perfil",
+    "cart": "Carrinho",
+    "login": "Entrar",
+    "signup": "Cadastrar",
+    "logout": "Sair",
+    "pricing": "Preços"
+  },
+  "home": {
+    "heroTitle": "Testes que revelam quem você realmente é",
+    "heroSubtitle": "Descubra sua personalidade, teste seu conhecimento e aprenda fatos surpreendentes com nossos testes interativos e virais.",
+    "cta": "Começar Agora →",
+    "categoriesTitle": "Categorias de Testes",
+    "categoriesSubtitle": "Explore diferentes tipos de testes feitos para revelar aspectos únicos da sua personalidade e inteligência.",
+    "featuredTest": "Teste em Destaque 🌟",
+    "exploreByCategory": "Explore por Categoria",
+    "popularTests": "Testes Populares 🔥",
+    "seeMore": "Ver mais"
+  },
+  "auth": {
+    "loginTitle": "Bem-vindo",
+    "loginSubtitle": "Entre no QuizLab",
+    "signupTitle": "Junte-se ao QuizLab",
+    "signupSubtitle": "Crie sua conta gratuitamente",
+    "email": "Email",
+    "password": "Senha",
+    "firstName": "Nome",
+    "lastName": "Sobrenome",
+    "confirmPassword": "Confirmar Senha",
+    "forgotPassword": "Esqueceu sua senha?",
+    "loginButton": "Entrar",
+    "signupButton": "Criar Conta",
+    "continueWith": "Ou continue com",
+    "orSignupWith": "Ou cadastre-se com",
+    "noAccount": "Não tem conta?",
+    "haveAccount": "Já tem conta?",
+    "verifyEmailTitle": "Verifique seu email",
+    "goToLogin": "Ir para o login"
+  }
+}

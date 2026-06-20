@@ -1,6 +1,7 @@
 import { getAllQuizzes, getTrendingQuizzes } from '@/data/helpers';
 import { getAllSilos } from '@/data/silos';
 import { fetchTestCategories } from '@/lib/api/tests';
+import { getTranslations } from 'next-intl/server';
 import QuizCard from '@/components/QuizCard';
 import TestCard from '@/components/tests/TestCard';
 import AdSlot from '@/components/AdSlot';
@@ -8,6 +9,7 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export default async function Home() {
+  const t = await getTranslations('home');
   const allQuizzes = await getAllQuizzes();
   const trendingQuizzes = await getTrendingQuizzes(4);
   const silos = getAllSilos();
@@ -20,10 +22,10 @@ export default async function Home() {
         <div className="absolute inset-0 bg-white/5 backdrop-blur-sm" />
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-            Tests que revelan quién eres realmente
+            {t('heroTitle')}
           </h1>
           <p className="text-lg sm:text-xl mb-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            Descubre tu personalidad, prueba tu conocimiento y aprende hechos sorprendentes con nuestros tests interactivos y virales.
+            {t('heroSubtitle')}
           </p>
 
           {/* Stats Cards */}
@@ -47,7 +49,7 @@ export default async function Home() {
           </div>
 
           <Link href="/personalidad" className="inline-flex items-center justify-center px-8 py-3 bg-gray-200/50 dark:bg-white/10 text-gray-900 dark:text-white font-semibold rounded-lg hover:bg-gray-200/70 dark:hover:bg-white/15 transition-all shadow-lg hover:shadow-xl backdrop-blur-sm border border-gray-300/50 dark:border-white/20">
-            Comenzar Ahora →
+            {t('cta')}
           </Link>
         </div>
       </section>
@@ -55,9 +57,9 @@ export default async function Home() {
       {/* TEST CATEGORIES SECTION */}
       <section className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Categorías de Tests</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">{t('categoriesTitle')}</h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Explora diferentes tipos de tests diseñados para descubrir aspectos únicos de tu personalidad e inteligencia.
+            {t('categoriesSubtitle')}
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -74,7 +76,7 @@ export default async function Home() {
 
       {/* FEATURED TEST */}
       <section className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8">Test Destacado 🌟</h2>
+        <h2 className="text-3xl font-bold mb-8">{t('featuredTest')}</h2>
         {trendingQuizzes.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="md:col-span-1">
@@ -104,7 +106,7 @@ export default async function Home() {
 
       {/* SILOS GRID */}
       <section className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Explora por Categoría</h2>
+        <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">{t('exploreByCategory')}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           {silos.map((silo) => (
             <Link key={silo.slug} href={`/${silo.slug}`}>
@@ -121,9 +123,9 @@ export default async function Home() {
       {/* TRENDING TESTS */}
       <section className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold">Tests Populares 🔥</h2>
+          <h2 className="text-3xl font-bold">{t('popularTests')}</h2>
           <Link href="/" className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-semibold flex items-center gap-2">
-            Ver más <ArrowRight size={20} />
+            {t('seeMore')} <ArrowRight size={20} />
           </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -9,7 +9,7 @@ import { defineRouting } from 'next-intl/routing';
  * Spanish is the default and uses unprefixed URLs ('as-needed'); other locales
  * are prefixed (e.g. /en, /en/auth/login).
  */
-export const locales = ['es', 'en'] as const;
+export const locales = ['es', 'en', 'pt'] as const;
 export type Locale = (typeof locales)[number];
 
 export const routing = defineRouting({

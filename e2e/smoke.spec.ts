@@ -13,6 +13,13 @@ test.describe('Public pages', () => {
     ).toBeVisible();
   });
 
+  test('home is available in English at /en', async ({ page }) => {
+    await page.goto('/en');
+    await expect(
+      page.getByRole('heading', { name: /Tests that reveal who you really are/i })
+    ).toBeVisible();
+  });
+
   test('login page shows the email/password form and OAuth options', async ({ page }) => {
     await page.goto('/auth/login');
     await expect(page.getByRole('heading', { name: 'Bienvenido' })).toBeVisible();

@@ -26,6 +26,7 @@ export default defineConfig({
   },
   use: {
     baseURL,
+    locale: 'es-ES',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     navigationTimeout: 30_000,

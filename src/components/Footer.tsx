@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -80,8 +81,9 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-600 text-sm">
+        <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center text-gray-600 text-sm">
           <p>&copy; {currentYear} QuizLab. Todos los derechos reservados.</p>
+          <LanguageSwitcher />
         </div>
       </div>
     </footer>
