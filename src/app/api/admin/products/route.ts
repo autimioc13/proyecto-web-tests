@@ -1,10 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { serviceSupabase as supabase } from '@/lib/supabase/service';
 
 const VALID_CATEGORIES = [
   'personality-report',

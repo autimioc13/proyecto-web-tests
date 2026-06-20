@@ -7,14 +7,9 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { Paddle, EventName, Environment } from '@paddle/paddle-node-sdk';
-import { createClient } from '@supabase/supabase-js';
+import { serviceSupabase as supabase } from '@/lib/supabase/service';
 import { enqueueEmail } from '@/lib/email-queue';
 import { PADDLE_ENVIRONMENT } from '@/lib/paddle/config';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Lazily create the Paddle client so importing this route never throws at
 // build time when PADDLE_API_KEY is not set.

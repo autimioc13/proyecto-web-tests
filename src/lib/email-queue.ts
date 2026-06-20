@@ -1,10 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { serviceSupabase as supabase } from '@/lib/supabase/service';
 import { sendTemplateEmail, EmailQueueItem } from './email';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 5 * 60 * 1000; // 5 minutes

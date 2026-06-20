@@ -1,10 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
+import { anonSupabase as supabase } from '@/lib/supabase/service';
 import crypto from 'crypto';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || 'https://example.com';
 

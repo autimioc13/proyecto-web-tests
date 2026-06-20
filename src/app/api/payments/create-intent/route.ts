@@ -9,13 +9,8 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
 import { buildOrder, PricingError, type CartLine } from '@/lib/pricing';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { serviceSupabase as supabase } from '@/lib/supabase/service';
 
 // Lazily create the Stripe client so importing this route never throws at
 // build time when STRIPE_SECRET_KEY is not set.

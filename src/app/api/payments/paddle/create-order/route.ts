@@ -4,13 +4,8 @@
 // order as completed. Prices are NEVER trusted from the client.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
 import { buildOrder, PricingError, type CartLine } from '@/lib/pricing';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+import { serviceSupabase as supabase } from '@/lib/supabase/service';
 
 interface CreateOrderRequest {
   items: CartLine[];

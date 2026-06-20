@@ -1,11 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { anonSupabase as supabase } from '@/lib/supabase/service';
 import { GamificationEvents } from '@/lib/analytics';
 import { XP_CONFIG, DifficultyLevel } from '@/lib/xp-config';
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
 
 // XP calculation
 export function calculateXP(
