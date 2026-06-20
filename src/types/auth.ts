@@ -85,7 +85,7 @@ export interface AuthContextType {
   isAuthenticated: boolean;
   isAdmin: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
-  signup: (data: SignupData) => Promise<void>;
+  signup: (data: SignupData) => Promise<{ needsEmailConfirmation: boolean }>;
   logout: () => Promise<void>;
   signupWithGoogle: () => Promise<void>;
   signupWithGithub: () => Promise<void>;

@@ -94,7 +94,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signup = useCallback(async (data: SignupData) => {
     try {
       setError(null);
-      const { error } = await supabase.auth.signUp({
+      const { data: signUpData, error } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
@@ -104,12 +104,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             last_name: data.lastName,
             provider: 'email',
           },
+          emailRedirectTo: `${typeof window !== 'undefined' ? window.location.origin : ''}/auth/callback?next=/dashboard`,
         },
       });
 
       if (error) throw error;
 
-      // Trigger will auto-create user profile and cart
+      // Trigger auto-creates the user profile and cart.
+      // If Supabase has "Confirm email" enabled, no session is returned and the
+      // user must verify their email before logging in.
+      return { needsEmailConfirmation: !signUpData.session };
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Signup failed';
       setError(message);

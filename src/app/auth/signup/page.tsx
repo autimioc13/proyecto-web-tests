@@ -51,7 +51,7 @@ export default function SignupPage() {
     setIsSubmitting(true);
 
     try {
-      await signup({
+      const { needsEmailConfirmation } = await signup({
         firstName,
         lastName,
         email,
@@ -59,8 +59,13 @@ export default function SignupPage() {
         displayName: `${firstName} ${lastName}`,
       });
 
-      // Redirect to verify email or dashboard
-      router.push('/auth/verify-email');
+      // If email confirmation is required, send them to the verify page;
+      // otherwise they already have a session -> go to the dashboard.
+      if (needsEmailConfirmation) {
+        router.push(`/auth/verify-email?email=${encodeURIComponent(email)}`);
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Signup failed';
       setFormError(message);
