@@ -12,14 +12,24 @@ import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import { buildOrder, PricingError, type CartLine } from '@/lib/pricing';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20' as any,
-});
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+// Lazily create the Stripe client so importing this route never throws at
+// build time when STRIPE_SECRET_KEY is not set.
+let stripeClient: Stripe | null = null;
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+  if (!stripeClient) {
+    stripeClient = new Stripe(key, { apiVersion: '2024-06-20' as any });
+  }
+  return stripeClient;
+}
 
 interface PaymentIntentRequest {
   items: CartLine[];
@@ -127,7 +137,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ---- Create the Stripe PaymentIntent (amount already in cents) ----
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await getStripe().paymentIntents.create({
       amount: amountCents,
       currency: 'usd',
       description: `Order ${orderId} from QuizLab`,
@@ -198,7 +208,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+    const paymentIntent = await getStripe().paymentIntents.retrieve(paymentIntentId);
 
     return NextResponse.json(
       {

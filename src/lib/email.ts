@@ -6,7 +6,20 @@ import { SignupWelcome } from '@/emails/SignupWelcome';
 import { PaymentSuccess } from '@/emails/PaymentSuccess';
 import { PaymentFailed } from '@/emails/PaymentFailed';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazily create the Resend client so importing this module never throws at
+// build time when RESEND_API_KEY is not set (e.g. during Next "collect page
+// data"). It only fails if an email is actually sent without a key.
+let resendClient: Resend | null = null;
+function getResend(): Resend {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY is not configured');
+  }
+  if (!resendClient) {
+    resendClient = new Resend(apiKey);
+  }
+  return resendClient;
+}
 
 export interface SendEmailOptions {
   to: string;
@@ -32,7 +45,7 @@ export async function sendEmail(options: SendEmailOptions): Promise<void> {
   const fromEmail = process.env.RESEND_FROM_EMAIL || 'noreply@quizlab.com';
 
   try {
-    const result = await resend.emails.send({
+    const result = await getResend().emails.send({
       from: fromEmail,
       to: options.to,
       subject: options.subject,

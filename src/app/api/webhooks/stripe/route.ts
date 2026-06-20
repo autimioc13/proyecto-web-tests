@@ -5,14 +5,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-06-20' as any,
-});
-
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+// Lazily create the Stripe client so importing this route never throws at
+// build time when STRIPE_SECRET_KEY is not set.
+let stripeClient: Stripe | null = null;
+function getStripe(): Stripe {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) {
+    throw new Error('STRIPE_SECRET_KEY is not configured');
+  }
+  if (!stripeClient) {
+    stripeClient = new Stripe(key, { apiVersion: '2024-06-20' as any });
+  }
+  return stripeClient;
+}
 
 // Types for Stripe events
 type StripeEvent = Stripe.Event;
@@ -32,7 +42,7 @@ export async function POST(req: NextRequest) {
     // Verify webhook signature
     let event: StripeEvent;
     try {
-      event = stripe.webhooks.constructEvent(
+      event = getStripe().webhooks.constructEvent(
         body,
         sig,
         process.env.STRIPE_WEBHOOK_SECRET!

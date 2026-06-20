@@ -16,10 +16,24 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const paddle = new Paddle(process.env.PADDLE_API_KEY || '', {
-  environment:
-    PADDLE_ENVIRONMENT === 'production' ? Environment.production : Environment.sandbox,
-});
+// Lazily create the Paddle client so importing this route never throws at
+// build time when PADDLE_API_KEY is not set.
+let paddleClient: Paddle | null = null;
+function getPaddle(): Paddle {
+  const key = process.env.PADDLE_API_KEY;
+  if (!key) {
+    throw new Error('PADDLE_API_KEY is not configured');
+  }
+  if (!paddleClient) {
+    paddleClient = new Paddle(key, {
+      environment:
+        PADDLE_ENVIRONMENT === 'production'
+          ? Environment.production
+          : Environment.sandbox,
+    });
+  }
+  return paddleClient;
+}
 
 export async function POST(req: NextRequest) {
   const signature = req.headers.get('paddle-signature') || '';
@@ -36,7 +50,7 @@ export async function POST(req: NextRequest) {
   let event;
   try {
     // Verifies the signature and parses the event
-    event = await paddle.webhooks.unmarshal(rawBody, webhookSecret, signature);
+    event = await getPaddle().webhooks.unmarshal(rawBody, webhookSecret, signature);
   } catch (err: any) {
     console.error('[Paddle] Signature verification failed:', err?.message);
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
