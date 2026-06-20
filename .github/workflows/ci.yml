@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Lint · Types · Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Advisory only for now: the codebase has many pre-existing
+      # `no-explicit-any`/unused-vars findings. Does not block CI until cleaned
+      # up incrementally. The blocking gates below are tsc + vitest.
+      - name: Lint (advisory)
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Type check
+        run: npx tsc --noEmit
+
+      - name: Unit tests (Vitest)
+        run: npm test
+
+  e2e:
+    name: E2E (Playwright)
+    runs-on: ubuntu-latest
+    # Dummy Supabase env so the production build and server start without real
+    # secrets. Public pages render from local/mock data; the proxy treats the
+    # request as unauthenticated, which is exactly what the smoke tests assert.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-dummy-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: ci-dummy-service-role-key
+      NEXT_PUBLIC_PADDLE_ENV: sandbox
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # Run only the functional smoke tests. Visual snapshots are Windows
+      # baselines and are intended for local runs (see e2e/visual.spec.ts).
+      - name: Run E2E smoke tests
+        run: npx playwright test e2e/smoke.spec.ts
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
