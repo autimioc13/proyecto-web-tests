@@ -46,6 +46,12 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [leaderboardData, setLeaderboardData] = useState<any[]>([]);
 
+  // Edit profile modal state
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [profileForm, setProfileForm] = useState({ firstName: '', lastName: '', bio: '' });
+
   // Simulated unlocked badges - in production this would come from database
   const mockUnlockedBadges = ['first_quiz', 'perfect_score', 'speed_demon', 'streak_5'];
 
@@ -65,6 +71,20 @@ export default function ProfilePage() {
         }
 
         setUser(authUser as UserData);
+
+        // Load editable profile fields from the users table
+        const { data: profileRow } = await supabase
+          .from('users')
+          .select('first_name, last_name, bio')
+          .eq('id', authUser.id)
+          .single();
+        if (profileRow) {
+          setProfileForm({
+            firstName: profileRow.first_name || '',
+            lastName: profileRow.last_name || '',
+            bio: profileRow.bio || '',
+          });
+        }
 
         // Get stats
         const statsData = await getUserStats(authUser.id);
@@ -108,6 +128,30 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSaveProfile = async () => {
+    if (!user) return;
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const { error } = await supabase
+        .from('users')
+        .update({
+          first_name: profileForm.firstName.trim(),
+          last_name: profileForm.lastName.trim(),
+          bio: profileForm.bio.trim(),
+        })
+        .eq('id', user.id);
+
+      if (error) throw error;
+      setEditing(false);
+    } catch (err) {
+      console.error('Error saving profile:', err);
+      setSaveError(err instanceof Error ? err.message : 'No se pudo guardar');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
@@ -120,7 +164,8 @@ export default function ProfilePage() {
     return null;
   }
 
-  const userName = user.user_metadata?.name || user.email?.split('@')[0] || 'Usuario';
+  const fullName = `${profileForm.firstName} ${profileForm.lastName}`.trim();
+  const userName = fullName || user.user_metadata?.name || user.email?.split('@')[0] || 'Usuario';
   const userAvatar = user.user_metadata?.picture;
   const badgeCount = unlockedBadges.length;
 
@@ -163,7 +208,13 @@ export default function ProfilePage() {
               <h2 className="text-3xl font-bold mb-1">{userName}</h2>
               <p className="text-slate-400 mb-4">{user.email}</p>
               <div className="flex items-center gap-4">
-                <button className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors">
+                <button
+                  onClick={() => {
+                    setSaveError(null);
+                    setEditing(true);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors"
+                >
                   <Settings size={16} />
                   Editar Perfil
                 </button>
@@ -277,14 +328,94 @@ export default function ProfilePage() {
 
         {/* Footer Actions */}
         <div className="flex gap-4 justify-center pt-8 border-t border-slate-700">
-          <button className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-colors">
+          <button
+            onClick={() => router.push('/privacy/my-rights')}
+            className="px-6 py-3 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-colors"
+          >
             Descargar Datos
           </button>
-          <button className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition-colors">
+          <button
+            onClick={() => router.push('/privacy/delete-account')}
+            className="px-6 py-3 bg-red-600 hover:bg-red-700 rounded-lg font-semibold transition-colors"
+          >
             Eliminar Cuenta
           </button>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {editing && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4"
+          onClick={() => !saving && setEditing(false)}
+        >
+          <div
+            className="w-full max-w-md bg-slate-800 border border-slate-600 rounded-2xl p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-2xl font-bold mb-4">Editar Perfil</h3>
+
+            {saveError && (
+              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 mb-4 text-red-300 text-sm">
+                {saveError}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-sm text-slate-300 mb-1">Nombre</label>
+                  <input
+                    type="text"
+                    value={profileForm.firstName}
+                    onChange={(e) => setProfileForm((p) => ({ ...p, firstName: e.target.value }))}
+                    disabled={saving}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 disabled:opacity-50"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-slate-300 mb-1">Apellido</label>
+                  <input
+                    type="text"
+                    value={profileForm.lastName}
+                    onChange={(e) => setProfileForm((p) => ({ ...p, lastName: e.target.value }))}
+                    disabled={saving}
+                    className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 disabled:opacity-50"
+                  />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm text-slate-300 mb-1">Bio</label>
+                <textarea
+                  value={profileForm.bio}
+                  onChange={(e) => setProfileForm((p) => ({ ...p, bio: e.target.value }))}
+                  disabled={saving}
+                  rows={3}
+                  className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white focus:outline-none focus:border-purple-500 disabled:opacity-50 resize-none"
+                  placeholder="Cuéntanos algo sobre ti"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3 justify-end mt-6">
+              <button
+                onClick={() => setEditing(false)}
+                disabled={saving}
+                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg font-semibold transition-colors disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSaveProfile}
+                disabled={saving}
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold transition-colors disabled:opacity-50"
+              >
+                {saving ? 'Guardando...' : 'Guardar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
