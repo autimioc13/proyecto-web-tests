@@ -697,3 +697,19 @@ CREATE POLICY "paddle_events_admin_read_all" ON public.paddle_events
   FOR SELECT USING (
     EXISTS (SELECT 1 FROM public.user_roles WHERE user_id = auth.uid() AND role = 'admin')
   );
+
+-- =====================================================================
+-- SECTION 7: Fix leaderboard Security Definer View advisory (0007)
+-- Safe: base tables (user_stats, quiz_completions) have public SELECT.
+-- Guarded so it doesn't fail if the view doesn't exist yet.
+-- =====================================================================
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM pg_class c
+    JOIN pg_namespace n ON n.oid = c.relnamespace
+    WHERE c.relname = 'user_leaderboard' AND n.nspname = 'public' AND c.relkind = 'v'
+  ) THEN
+    EXECUTE 'ALTER VIEW public.user_leaderboard SET (security_invoker = on)';
+  END IF;
+END $$;
