@@ -27,25 +27,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    // Fetch the user's profile. IMPORTANT: this is never awaited *inside* the
-    // onAuthStateChange callback, to avoid the @supabase/ssr auth-lock deadlock
-    // (which caused the dashboard to hang on "Cargando...").
-    const fetchUserProfile = async (userId: string) => {
+    // Map a DB users row (+ role) into our camelCase UserProfile.
+    const mapProfile = (data: any, sessionUser: any, role?: string): UserProfile => ({
+      id: data?.id ?? sessionUser.id,
+      userId: data?.id ?? sessionUser.id,
+      firstName:
+        data?.first_name ?? sessionUser.user_metadata?.first_name ??
+        sessionUser.user_metadata?.name?.split(' ')?.[0] ?? '',
+      lastName: data?.last_name ?? sessionUser.user_metadata?.last_name ?? '',
+      email: data?.email ?? sessionUser.email ?? '',
+      avatar: data?.avatar_url ?? sessionUser.user_metadata?.avatar_url ?? null,
+      bio: data?.bio ?? null,
+      role: (role ?? 'user') as UserRole,
+      isEmailVerified: data?.is_email_verified ?? !!sessionUser.email_confirmed_at,
+      isActive: data?.is_active ?? true,
+      createdAt: new Date(data?.created_at ?? sessionUser.created_at ?? Date.now()),
+      updatedAt: new Date(data?.updated_at ?? data?.created_at ?? Date.now()),
+      lastLoginAt: data?.last_login_at ? new Date(data.last_login_at) : null,
+    });
+
+    // Fetch the user's profile. Never awaited *inside* onAuthStateChange (avoids
+    // the @supabase/ssr auth-lock deadlock). On failure we keep the user logged
+    // in with a minimal profile derived from the session, instead of logging
+    // them out.
+    const fetchUserProfile = async (sessionUser: any) => {
       try {
         const { data, error } = await supabase
           .from('users')
           .select('*, user_roles(role)')
-          .eq('id', userId)
+          .eq('id', sessionUser.id)
           .single();
 
         if (error) throw error;
-        if (mounted) setUser(data as UserProfile);
+
+        const roles = (data as any)?.user_roles;
+        const role = Array.isArray(roles) ? roles[0]?.role : roles?.role;
+        if (mounted) {
+          setUser(mapProfile(data, sessionUser, role));
+          setError(null);
+        }
       } catch (err) {
         console.error('Profile fetch error:', err);
-        if (mounted) {
-          setUser(null);
-          setError(err instanceof Error ? err.message : 'Profile load failed');
-        }
+        // Session is valid — keep the user signed in with a fallback profile.
+        if (mounted) setUser(mapProfile(null, sessionUser));
       }
     };
 
@@ -55,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       .then(({ data: { session } }) => {
         if (!mounted) return;
         if (session?.user) {
-          fetchUserProfile(session.user.id).finally(() => {
+          fetchUserProfile(session.user).finally(() => {
             if (mounted) setLoading(false);
           });
         } else {
@@ -74,7 +98,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setTimeout(() => {
-          if (mounted) fetchUserProfile(session.user.id);
+          if (mounted) fetchUserProfile(session.user);
         }, 0);
       } else if (mounted) {
         setUser(null);
