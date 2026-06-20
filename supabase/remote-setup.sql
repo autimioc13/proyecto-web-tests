@@ -185,11 +185,10 @@ DROP POLICY IF EXISTS "user_roles_select_own" ON public.user_roles;
 CREATE POLICY "user_roles_select_own" ON public.user_roles
   FOR SELECT USING (auth.uid() = user_id);
 
+-- NOTE: a self-referential "admin read all" policy on user_roles causes
+-- "infinite recursion detected in policy". Admin reads use the service role
+-- (which bypasses RLS), so we intentionally DO NOT create that policy here.
 DROP POLICY IF EXISTS "user_roles_admin_read_all" ON public.user_roles;
-CREATE POLICY "user_roles_admin_read_all" ON public.user_roles
-  FOR SELECT USING (
-    EXISTS (SELECT 1 FROM public.user_roles ur WHERE ur.user_id = auth.uid() AND ur.role = 'admin')
-  );
 
 DROP POLICY IF EXISTS "carts_select_own" ON public.carts;
 CREATE POLICY "carts_select_own" ON public.carts FOR SELECT USING (auth.uid() = user_id);

@@ -25,49 +25,64 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Initialize auth on mount
   useEffect(() => {
-    const initAuth = async () => {
+    let mounted = true;
+
+    // Fetch the user's profile. IMPORTANT: this is never awaited *inside* the
+    // onAuthStateChange callback, to avoid the @supabase/ssr auth-lock deadlock
+    // (which caused the dashboard to hang on "Cargando...").
+    const fetchUserProfile = async (userId: string) => {
       try {
-        // Check existing session
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data, error } = await supabase
+          .from('users')
+          .select('*, user_roles(role)')
+          .eq('id', userId)
+          .single();
 
-        if (session?.user) {
-          // Fetch user profile from database
-          const { data, error } = await supabase
-            .from('users')
-            .select('*, user_roles(role)')
-            .eq('id', session.user.id)
-            .single();
-
-          if (error) throw error;
-
-          setUser(data as UserProfile);
-        }
+        if (error) throw error;
+        if (mounted) setUser(data as UserProfile);
       } catch (err) {
-        console.error('Auth init error:', err);
-        setError(err instanceof Error ? err.message : 'Auth initialization failed');
-      } finally {
-        setLoading(false);
+        console.error('Profile fetch error:', err);
+        if (mounted) {
+          setUser(null);
+          setError(err instanceof Error ? err.message : 'Profile load failed');
+        }
       }
     };
 
-    initAuth();
+    // Initial session check
+    supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (!mounted) return;
+        if (session?.user) {
+          fetchUserProfile(session.user.id).finally(() => {
+            if (mounted) setLoading(false);
+          });
+        } else {
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Auth init error:', err);
+        if (mounted) setLoading(false);
+      });
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    // Listen for auth changes. Keep this callback synchronous and defer any
+    // Supabase calls with setTimeout(0) so the auth lock is released first.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        const { data } = await supabase
-          .from('users')
-          .select('*, user_roles(role)')
-          .eq('id', session.user.id)
-          .single();
-
-        setUser(data as UserProfile);
-      } else {
+        setTimeout(() => {
+          if (mounted) fetchUserProfile(session.user.id);
+        }, 0);
+      } else if (mounted) {
         setUser(null);
       }
     });
 
     return () => {
+      mounted = false;
       subscription?.unsubscribe();
     };
   }, []);
